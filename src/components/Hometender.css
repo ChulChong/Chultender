@@ -1,0 +1,57 @@
+.container {
+  background-color: #ddd;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  overflow: hidden;
+}
+
+.tab {
+  cursor: pointer;
+  position: absolute;
+  text-align: center;
+  padding: 10px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 0 70px rgba(black, 0.8);
+  font-family: "Avenir";
+  font-weight: 700;
+  font-size: 38px;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+
+  &:hover {
+    filter: grayscale(0.3);
+  }
+}
+
+.ingredients {
+  margin-top: 20px;
+  margin-left: 20px;
+  text-align: left;
+  font-size: 20px;
+}
+.details {
+  font-size: 15px;
+}
+
+.tab-1 {
+  background-color: #819651;
+}
+
+.tab-2 {
+  background-color: #3d2471;
+}
+
+.tab-3 {
+  background-color: #28a636;
+}
+
+.tab-4 {
+  background-color: #ae001f;
+}
