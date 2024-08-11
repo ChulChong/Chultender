@@ -14,7 +14,7 @@ const Layout = () => {
           <img className="img" src={bartender} alt=""></img>
           <nav>
             <Link className="link" to="/Hometender">
-              Welcome to Hometender
+              Welcome to Chultender
             </Link>
           </nav>
         </div>
