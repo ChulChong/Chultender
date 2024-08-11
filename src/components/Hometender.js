@@ -17,19 +17,19 @@ function Hometender() {
 
   const listItems = recipes.map((drink) => (
     <div key={drink.id}>
-      <div class="outer">
-        <button class="accordion" id={drink.id}>
+      <div className="outer" id={drink.id}>
+        <button className="accordion" id={drink.id}>
           {drink.name}
         </button>
-        <div class="panel" id={drink.id}>
-          <div class="ingredients" id={drink.id}>
+        <div className="panel" id={drink.id}>
+          <div className="ingredients" id={drink.id}>
             <div>{dummyDataLoop(drink.ingredients)}</div>
           </div>
-          <div class="details" id={drink.id}>
+          <div className="details" id={drink.id}>
             {drink.details}
           </div>
-          <div class="picture-wrapper" id={drink.id}>
-            <img class="picture" src={drink.image} id={drink.id} alt="" />
+          <div className="picture-wrapper" id={drink.id}>
+            <img className="picture" src={drink.image} id={drink.id} alt="" />
           </div>
         </div>
       </div>

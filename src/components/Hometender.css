@@ -1,14 +1,16 @@
 /* Style the buttons that are used to open and close the accordion panel */
 .accordion {
-  color: #444;
+  color: rgb(51, 51, 51);
   cursor: pointer;
+  font-size: 20px;
   padding: 18px;
   width: 100%;
   text-align: center;
   border: none;
   outline: none;
   transition: 0.9s;
-  border-radius: 20px 20px 0px 0px;
+  font-family: Lobster;
+  border-radius: 40px 40px 0 0;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -19,29 +21,32 @@
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
+  font-family: "News Cycle";
   padding: 0 18px;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-out;
+  height: 100%;
+  transition: max-height 0.2s ease-out;
 }
-
 .outer {
+  background-color: #819651;
 }
 
 .ingredients {
   margin-top: 30px;
   margin-left: 10px;
   text-align: left;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: bold;
 }
 .details {
   font-size: 15px;
   text-align: left;
-  padding: 10px;
+  padding: 30px;
 }
 .picture {
-  width: 200px;
-  height: 290px;
+  width: 150px;
+  height: 250px;
   text-align: center;
 }
 .picture-wrapper {
@@ -49,45 +54,44 @@
   text-align: center;
 }
 
-#mintjulep {
+#mintjulep,
+.outer#godfather,
+#mojito,
+.outer#pinacolada {
   background-color: #819651;
 }
 
-#godfather {
+#godfather,
+.outer#jackcoke {
   background-color: #814118;
 }
 
 .picture#godfather {
-  height: 220px;
+  height: 180px;
 }
 
-#jackcoke {
+#jackcoke,
+.outer#bluehawaii {
   background-color: #d85b43;
 }
 
-.picture#jackcoke {
+.picture#jackcoke,
+.picture#mojito {
   height: 300px;
-  width: 150px;
 }
 
-#bluehawaii {
+#bluehawaii,
+.outer#mojito {
   background-color: #b4611e;
 }
 
-#mojito {
-  background-color: #819651;
-}
-
-.picture#mojito {
-  height: 300px;
-  width: 150px;
-}
-
-#pinacolada {
+#pinacolada,
+.outer#whiskeysour {
   background-color: #e6ddcb;
 }
 
-#whiskeysour {
+#whiskeysour,
+.outer#wildflower {
   background-color: #588278;
 }
 

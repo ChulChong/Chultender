@@ -10,7 +10,7 @@ import wildflower from "../image/WildFlower.png";
 export const recipes = [
   {
     id: "mintjulep",
-    name: "Mint Julep",
+    name: "Mint Juelp",
     ingredients: ["1 1/8 oz Scotch", "1 1/8 oz Disaronno"],
     details:
       "Muddle the mint leaves and simple syrup in the bottom of a rocks glass or julep cup. Be brief and gentle; abrasive muddling will turn the mint bitter. Add crushed ice and bourbon to the glass, stirring until the glass frosts. Top with more ice, and serve with a straw and mint sprig to tickle your nose.",
@@ -36,7 +36,7 @@ export const recipes = [
     name: "Blue Hawaii",
     ingredients: [
       "1 1/2 oz White Rum",
-      "1 oz Blue Curaco",
+      "1 oz Blue Curaço",
       "1 oz Sweet & sour Mix",
       "4 oz Pineapple Juice",
     ],
@@ -59,7 +59,7 @@ export const recipes = [
   },
   {
     id: "pinacolada",
-    name: "Pina Colada",
+    name: "Piña Colada",
     ingredients: [
       "1 oz White Rum",
       "3 oz Pineapple Juice",
