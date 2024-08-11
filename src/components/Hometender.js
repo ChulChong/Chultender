@@ -1,83 +1,42 @@
-import "./Hometender.css";
-import { useEffect } from "react";
 import Helper from "./Helper";
-import pictures from "./pictures";
+import { useEffect } from "react";
+import "./Hometender.css";
+import { recipes } from "./Recipes";
 
-const Hometender = () => {
+function Hometender() {
   useEffect(() => {
     Helper();
   });
+  const dummyDataLoop = (dummydata) => {
+    var rows = [];
+    for (let i = 0; i < dummydata.length; i++) {
+      rows.push(<div>{dummydata[i]}</div>);
+    }
+    return rows;
+  };
 
-  return (
-    <div class="container">
-      <div class="tab tab-1">
-        MINT JULEP
-        <div class="ingredients">
-          <div>2 oz Bourbon</div>
-          <div>8 Mint Leaves</div>
-          <div>1 MINT SPRIG</div>
-          <div>1/2 oz SIMPLE SYRUP</div>
+  const listItems = recipes.map((drink) => (
+    <div key={drink.id}>
+      <div class="outer">
+        <button class="accordion" id={drink.id}>
+          {drink.name}
+        </button>
+        <div class="panel" id={drink.id}>
+          <div class="ingredients" id={drink.id}>
+            <div>{dummyDataLoop(drink.ingredients)}</div>
+          </div>
+          <div class="details" id={drink.id}>
+            {drink.details}
+          </div>
+          <div class="picture-wrapper" id={drink.id}>
+            <img class="picture" src={drink.image} id={drink.id} alt="" />
+          </div>
         </div>
-        <div class="details">
-          Muddle the mint leaves and simple syrup in the bottom of a rocks glass
-          or julep cup. Be brief and gentle; abrasive muddling will turn the
-          mint bitter. Add crushed ice and bourbon to the glass, stirring until
-          the glass frosts. Top with more ice, and serve with a straw and mint
-          sprig to tickle your nose.
-        </div>
-        <div
-          class="picture"
-          img="/Users/chulchong/cs/Hometender/public/image/MintJulep.png"
-        ></div>
-      </div>
-      <div class="tab tab-2">
-        MOJITO <br /> <br />
-        <div class="ingredients">
-          <div>1 1/3oz WHITE CUBAN RUM</div>
-          <div>1 oz FRESH LIME JUICE</div>
-          <div>6 MINT SPRINGS</div>
-          <div>2 Tsp White Sugar</div>
-          <div>SODA WATER</div>
-        </div>
-      </div>
-
-      <div class="tab tab-3">
-        Pina Colada <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
-      </div>
-      <div class="tab tab-4">
-        Wild Flower <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
-      </div>
-      <div class="tab tab-4">
-        Wild Flower <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
-      </div>
-      <div class="tab tab-4">
-        Wild Flower <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
-      </div>
-      <div class="tab tab-4">
-        Wild Flower <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
-      </div>
-      <div class="tab tab-4">
-        Wild Flower <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
-      </div>
-      <div class="tab tab-4">
-        Wild Flower <br /> <br />
-        <div>2 oz Scotch</div>
-        <div>2 oz Disaronno</div>
       </div>
     </div>
-  );
-};
+  ));
+
+  return <div>{listItems}</div>;
+}
 
 export default Hometender;

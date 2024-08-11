@@ -1,57 +1,105 @@
-.container {
-  background-color: #ddd;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  overflow: hidden;
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: center;
+  border: none;
+  outline: none;
+  transition: 0.9s;
+  border-radius: 20px 20px 0px 0px;
 }
 
-.tab {
-  cursor: pointer;
-  position: absolute;
-  text-align: center;
-  padding: 10px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  box-shadow: 0 0 70px rgba(black, 0.8);
-  font-family: "Avenir";
-  font-weight: 700;
-  font-size: 38px;
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+  background-color: relative;
+}
 
-  &:hover {
-    filter: grayscale(0.3);
-  }
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.outer {
 }
 
 .ingredients {
-  margin-top: 20px;
-  margin-left: 20px;
+  margin-top: 30px;
+  margin-left: 10px;
   text-align: left;
-  font-size: 20px;
+  font-size: 16px;
 }
 .details {
   font-size: 15px;
+  text-align: left;
+  padding: 10px;
+}
+.picture {
+  width: 200px;
+  height: 290px;
+  text-align: center;
+}
+.picture-wrapper {
+  display: block;
+  text-align: center;
 }
 
-.tab-1 {
+#mintjulep {
   background-color: #819651;
 }
 
-.tab-2 {
-  background-color: #3d2471;
+#godfather {
+  background-color: #814118;
 }
 
-.tab-3 {
-  background-color: #28a636;
+.picture#godfather {
+  height: 220px;
 }
 
-.tab-4 {
-  background-color: #ae001f;
+#jackcoke {
+  background-color: #d85b43;
+}
+
+.picture#jackcoke {
+  height: 300px;
+  width: 150px;
+}
+
+#bluehawaii {
+  background-color: #b4611e;
+}
+
+#mojito {
+  background-color: #819651;
+}
+
+.picture#mojito {
+  height: 300px;
+  width: 150px;
+}
+
+#pinacolada {
+  background-color: #e6ddcb;
+}
+
+#whiskeysour {
+  background-color: #588278;
+}
+
+.picture#whiskeysour {
+  height: 300px;
+  width: 200px;
+}
+#wildflower {
+  background-color: #bca296;
+}
+
+.picture#wildflower {
+  height: 250px;
+  width: 200px;
 }
