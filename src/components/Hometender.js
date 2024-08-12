@@ -2,6 +2,7 @@ import Helper from "./Helper";
 import { useEffect } from "react";
 import "./Hometender.css";
 import { recipes } from "./Recipes";
+import chultender from "../image/chultender.com.gif";
 
 function Hometender() {
   useEffect(() => {
@@ -36,7 +37,12 @@ function Hometender() {
     </div>
   ));
 
-  return <div>{listItems}</div>;
+  return (
+    <div>
+      <img src={chultender} className="neonsign" alt="" />
+      {listItems}
+    </div>
+  );
 }
 
 export default Hometender;

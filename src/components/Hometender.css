@@ -12,6 +12,14 @@
   font-family: Lobster;
   border-radius: 50px 50px 0 0;
 }
+.neonsign {
+  margin-top: -15rem;
+  width: 100%;
+}
+
+.outer#mintjulep {
+  margin-top: -20rem;
+}
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 .active,
@@ -32,9 +40,7 @@
   border: none;
   outline: none;
   transition: max-height 0.2s ease-out;
-}
-.outer {
-  background-color: #819651;
+  position: relative;
 }
 
 .ingredients {
@@ -47,9 +53,10 @@
 .details {
   font-size: 2.5rem;
   text-align: left;
-  padding: 30px;
+  padding: 5rem;
 }
 .picture {
+  margin-left: 1rem;
   width: 20rem;
   height: 30rem;
   text-align: center;
@@ -68,11 +75,12 @@
 
 #godfather,
 .outer#jackcoke {
+  position: relative;
   background-color: #814118;
 }
 
 .picture#godfather {
-  height: 22rem;
+  height: 25rem;
 }
 
 #jackcoke,
@@ -80,12 +88,15 @@
   background-color: #d85b43;
 }
 
-.picture#jackcoke,
+.picture#jackcoke {
+  height: 35rem;
+  width: 15rem;
+}
 .picture#mojito {
   height: 40rem;
-  width: 18rem;
+  width: 20rem;
+  margin-left: 3rem;
 }
-
 #bluehawaii,
 .outer#mojito {
   background-color: #b4611e;
