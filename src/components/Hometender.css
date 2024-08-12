@@ -28,6 +28,7 @@
   max-height: 0;
   overflow: hidden;
   height: 100%;
+  margin-top: -1px;
   border: none;
   outline: none;
   transition: max-height 0.2s ease-out;
