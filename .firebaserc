@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "chultender",
+    "chultender": "chultender"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
