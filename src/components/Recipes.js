@@ -11,7 +11,12 @@ export const recipes = [
   {
     id: "mintjulep",
     name: "Mint Juelp",
-    ingredients: ["1 1/8 oz Scotch", "1 1/8 oz Disaronno"],
+    ingredients: [
+      "2 oz Bourbon",
+      "8 Mint Leaves",
+      "1 Mint Sprig",
+      "1/2 oz Simple Syrup",
+    ],
     details:
       "Muddle the mint leaves and simple syrup in the bottom of a rocks glass or julep cup. Be brief and gentle; abrasive muddling will turn the mint bitter. Add crushed ice and bourbon to the glass, stirring until the glass frosts. Top with more ice, and serve with a straw and mint sprig to tickle your nose.",
     image: mintjulep,
