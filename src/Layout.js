@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
+import { isMobile } from "react-device-detect";
 import "./Layout.css";
 import bartender from "../src/image/5145974.png";
 
 const Layout = () => {
-  const isDesktopOrLaptop = useMediaQuery({ query: "(min-width: 1224px)" });
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   return (
     <div>
-      {isDesktopOrLaptop && <p>This app is does not support desktop</p>}
-      {isTabletOrMobile && (
+      {isMobile && (
         <div className="main">
           <img className="img" src={bartender} alt=""></img>
           <nav>
@@ -19,6 +16,7 @@ const Layout = () => {
           </nav>
         </div>
       )}
+      <p>This app is only supported on mobile </p>
     </div>
   );
 };
