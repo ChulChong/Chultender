@@ -2,30 +2,34 @@
 .accordion {
   color: rgb(51, 51, 51);
   cursor: pointer;
-  font-size: 20px;
-  padding: 18px;
+  font-size: 4rem;
+  padding: 2vh;
   width: 100%;
   text-align: center;
   border: none;
   outline: none;
   transition: 0.9s;
   font-family: Lobster;
-  border-radius: 40px 40px 0 0;
+  border-radius: 50px 50px 0 0;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 .active,
 .accordion:hover {
   background-color: relative;
+  border: none;
+  outline: none;
 }
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
   font-family: "News Cycle";
-  padding: 0 18px;
+  padding: 0 4rem;
   max-height: 0;
   overflow: hidden;
   height: 100%;
+  border: none;
+  outline: none;
   transition: max-height 0.2s ease-out;
 }
 .outer {
@@ -36,17 +40,17 @@
   margin-top: 30px;
   margin-left: 10px;
   text-align: left;
-  font-size: 18px;
+  font-size: 3rem;
   font-weight: bold;
 }
 .details {
-  font-size: 15px;
+  font-size: 2.5rem;
   text-align: left;
   padding: 30px;
 }
 .picture {
-  width: 150px;
-  height: 250px;
+  width: 20rem;
+  height: 30rem;
   text-align: center;
 }
 .picture-wrapper {
@@ -67,7 +71,7 @@
 }
 
 .picture#godfather {
-  height: 180px;
+  height: 22rem;
 }
 
 #jackcoke,
@@ -77,7 +81,8 @@
 
 .picture#jackcoke,
 .picture#mojito {
-  height: 300px;
+  height: 40rem;
+  width: 18rem;
 }
 
 #bluehawaii,
@@ -96,14 +101,14 @@
 }
 
 .picture#whiskeysour {
-  height: 300px;
-  width: 200px;
+  height: 30rem;
+  width: 20rem;
 }
 #wildflower {
   background-color: #bca296;
 }
 
 .picture#wildflower {
-  height: 250px;
-  width: 200px;
+  height: 25rem;
+  width: 20rem;
 }

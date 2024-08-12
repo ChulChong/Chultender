@@ -6,16 +6,16 @@ p {
 .main {
   background-color: rgb(10, 23, 121);
   text-align: center;
-  height: 1000px;
+  height: 100vh;
 }
 .img {
-  width: 200px;
+  width: 80vw;
   margin-top: 250px;
-  margin-bottom: 30px;
+  margin-bottom: 10vh;
 }
 
 .link {
   font-family: "News Cycle";
-  font-size: 20px;
+  font-size: 4rem;
   font-family: "Courier New", Courier, monospace;
 }
