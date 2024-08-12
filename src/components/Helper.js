@@ -1,10 +1,10 @@
 const Helper = () => {
   var acc = document.getElementsByClassName("accordion");
-  let active = document.getElementsByClassName("accordion active");
   var i;
 
   for (i = 0; i < acc.length; i++) {
     if (acc[i].id === "wildflower") {
+      acc[i].classList.toggle("active");
       var panel = acc[i].nextElementSibling;
       panel.style.maxHeight = panel.scrollHeight + 50 + "px";
       panel.style.height = panel.scrollHeight + 50 + "px";

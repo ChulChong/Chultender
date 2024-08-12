@@ -6,7 +6,7 @@ import bartender from "../src/image/5145974.png";
 const Layout = () => {
   return (
     <div>
-      {isMobile && (
+      {
         <div className="main">
           <img className="img" src={bartender} alt=""></img>
           <nav>
@@ -15,7 +15,7 @@ const Layout = () => {
             </Link>
           </nav>
         </div>
-      )}
+      }
       <p>This app is only supported on mobile </p>
     </div>
   );
