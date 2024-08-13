@@ -1,21 +1,21 @@
 p {
-  padding: 400px;
+  padding: 300px;
   text-align: center;
   font-size: 30px;
+  font-family: league spartan;
+  font-weight: 600;
 }
 .main {
-  background-color: #060644;
-  text-align: center;
+  background-color: #ff7e7e;
   height: 100vh;
 }
 .img {
-  width: 80vw;
-  margin-top: 250px;
-  margin-bottom: 10vh;
+  width: 100%;
+  position: absolute;
+  top: 23rem;
 }
-
-.link {
-  font-family: "News Cycle";
-  font-size: 4rem;
-  font-family: "Courier New", Courier, monospace;
+.img2 {
+  width: 100%;
+  position: absolute;
+  top: 53rem;
 }

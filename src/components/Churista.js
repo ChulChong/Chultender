@@ -1,17 +1,8 @@
 import churista from "../image/churista.gif";
 import "./Churista.css";
-import { useEffect } from "react";
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { cafemenu } from "./Cafemenu";
 
 const Churista = () => {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   const listItems = cafemenu.map((drink) => (
     <div>
       <div className="block" id={drink.id}>
