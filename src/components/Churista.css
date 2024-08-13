@@ -25,33 +25,35 @@
 }
 .block#affogato {
   background-color: #d1a26c;
-  height: 36rem;
+  height: 34rem;
 }
 
 .coffee-image {
   width: 40%;
 }
 
-.coffee-image#cafelatte,
-.coffee-image#cafemocha {
-  width: 34%;
+.coffee-image#cafelatte {
+  width: 32%;
   margin-top: 5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  margin-left: 1rem;
+}
+.coffee-image#cafemocha,
+.coffee-image#caramelmacchiato {
+  width: 35%;
+  margin-top: 6rem;
+  margin-bottom: 3rem;
 }
 
 .coffee-image#whitemocha {
   width: 45%;
   margin-left: -1rem;
 }
-.coffee-image#caramelmacchiato {
+
+.coffee-image#vanillalatte {
   width: 40%;
   margin-top: 5rem;
-  margin-bottom: 2rem;
-}
-.coffee-image#vanillalatte {
-  width: 35%;
-  margin-top: 4rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 .coffee-image#whitemocha {
   width: 50%;
@@ -59,14 +61,14 @@
   margin-bottom: 2rem;
 }
 .coffee-image#handdrip {
-  width: 35%;
-  margin-top: 5rem;
+  width: 30%;
+  margin-top: 6rem;
   margin-left: -3rem;
   margin-bottom: 3rem;
 }
 .coffee-image#affogato {
-  width: 30%;
-  margin-top: 5rem;
+  width: 25%;
+  margin-top: 4.5rem;
   margin-bottom: 3rem;
 }
 .drinkname {

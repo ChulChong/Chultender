@@ -3,7 +3,7 @@ import cafelatte from "../image/cafelatte.png";
 import cafemocha from "../image/cafemocha.png";
 import whitemocha from "../image/whitemocha.png";
 import caramelmacchiato from "../image/caramelmacchiato.png";
-import vanillalatte from "../image/cafelatte.png";
+import vanillalatte from "../image/vanillalatte.png";
 import handdrip from "../image/handdrip.png";
 import affogato from "../image/affogato.png";
 
