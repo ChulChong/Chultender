@@ -37,8 +37,7 @@ const Layout = () => {
           }
         </div>
       )}
-
-      <p>This app is only supported on mobile</p>
+      {!isMobile && <p>This app is only supported on mobile</p>}
     </div>
   );
 };
