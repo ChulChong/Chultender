@@ -1,0 +1,77 @@
+.neonsign {
+  width: 100%;
+  display: flex;
+}
+.block,
+.block#vanillalatte {
+  background-color: #98cdda;
+  text-align: center;
+  height: 32rem;
+}
+
+.block#cafelatte,
+.block#handdrip {
+  background-color: #70575e;
+}
+
+.block#cafemocha {
+  background-color: #d1a26c;
+}
+.block#whitemocha {
+  background-color: #536431;
+}
+.block#caramelmacchiato {
+  background-color: #463232;
+}
+.block#affogato {
+  background-color: #d1a26c;
+  height: 36rem;
+}
+
+.coffee-image {
+  width: 40%;
+}
+
+.coffee-image#cafelatte,
+.coffee-image#cafemocha {
+  width: 34%;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+}
+
+.coffee-image#whitemocha {
+  width: 45%;
+  margin-left: -1rem;
+}
+.coffee-image#caramelmacchiato {
+  width: 40%;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+}
+.coffee-image#vanillalatte {
+  width: 35%;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+.coffee-image#whitemocha {
+  width: 50%;
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+}
+.coffee-image#handdrip {
+  width: 35%;
+  margin-top: 5rem;
+  margin-left: -3rem;
+  margin-bottom: 3rem;
+}
+.coffee-image#affogato {
+  width: 30%;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
+.drinkname {
+  font-family: league spartan;
+  font-weight: 600;
+  font-size: 2rem;
+  color: aliceblue;
+}

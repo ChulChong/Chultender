@@ -17,7 +17,8 @@
 }
 
 .outer#mintjulep {
-  margin-top: -3rem;
+  margin-top: 0;
+  border-radius: 50px 50px 0 0;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */

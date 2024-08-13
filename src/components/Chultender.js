@@ -1,6 +1,6 @@
 import Helper from "./Helper";
 import { useEffect } from "react";
-import "./Hometender.css";
+import "./Chultender.css";
 import { recipes } from "./Recipes";
 import chultender from "../image/chultender.gif";
 
@@ -38,7 +38,7 @@ function Hometender() {
   ));
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#0A08AC" }}>
       <img src={chultender} className="neonsign" alt="" />
       {listItems}
     </div>
