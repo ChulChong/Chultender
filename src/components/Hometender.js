@@ -2,7 +2,7 @@ import Helper from "./Helper";
 import { useEffect } from "react";
 import "./Hometender.css";
 import { recipes } from "./Recipes";
-import chultender from "../image/chultender.com.gif";
+import chultender from "../image/chultender.gif";
 
 function Hometender() {
   useEffect(() => {

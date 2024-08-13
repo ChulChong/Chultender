@@ -14,12 +14,11 @@
   border-radius: 50px 50px 0 0;
 }
 .neonsign {
-  margin-top: -15rem;
   width: 100%;
 }
 
 .outer#mintjulep {
-  margin-top: -20rem;
+  margin-top: -3rem;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -37,7 +36,7 @@
   max-height: 0;
   overflow: hidden;
   height: 100%;
-  margin-top: -1px;
+  margin-top: -2px;
   border: none;
   outline: none;
   transition: max-height 0.2s ease-out;
@@ -72,12 +71,14 @@
 #mojito,
 .outer#pinacolada {
   background-color: #819651;
+  color: rgb(241, 255, 225);
 }
 
 #godfather,
 .outer#jackcoke {
   position: relative;
-  background-color: #814118;
+  background-color: #c0713f;
+  color: rgb(255, 213, 135);
 }
 
 .picture#godfather {
@@ -86,7 +87,8 @@
 
 #jackcoke,
 .outer#bluehawaii {
-  background-color: #d85b43;
+  background-color: #69392f;
+  color: rgb(232, 201, 201);
 }
 
 .picture#jackcoke {
@@ -100,17 +102,20 @@
 }
 #bluehawaii,
 .outer#mojito {
-  background-color: #b4611e;
+  background-color: #4d91de;
+  color: rgb(126, 201, 255);
 }
 
 #pinacolada,
 .outer#whiskeysour {
   background-color: #e6ddcb;
+  color: rgb(148, 148, 61);
 }
 
 #whiskeysour,
 .outer#wildflower {
-  background-color: #588278;
+  background-color: #d6be50;
+  color: rgb(245, 255, 180);
 }
 
 .picture#whiskeysour {
@@ -118,7 +123,8 @@
   width: 20rem;
 }
 #wildflower {
-  background-color: #bca296;
+  background-color: #fc9a6d;
+  color: rgb(250, 201, 110);
 }
 
 .picture#wildflower {
