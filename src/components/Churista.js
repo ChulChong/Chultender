@@ -7,11 +7,20 @@ import CloseButton from "react-bootstrap/CloseButton";
 import Button from "react-bootstrap/Button";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import emailjs from "@emailjs/browser";
 
 const Churista = () => {
   const [fullscreen, setFullscreen] = useState(true);
   const [show, setShow] = useState(false);
+  const [insideModalshow, setinsideModalShow] = useState(false);
   const [currentDrinkData, setCurrentDrinkData] = useState([]);
+  const [submitData, updateSubmitData] = useState({
+    name: "",
+    drinkname: "",
+    isIced: "",
+  });
   const [IsIced, setIsIced] = useState(false);
 
   const listItems = cafemenu.map((drink) => (
@@ -30,6 +39,24 @@ const Churista = () => {
     </div>
   ));
 
+  const sendEmail = (e) => {
+    emailjs
+      .send(
+        "service_y4u4u9z",
+        "template_dyo5unf",
+        submitData,
+        "uucLbm7oCkBcst-pE"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
+
   function handleShow() {
     if (show) {
       setFullscreen(false);
@@ -41,10 +68,40 @@ const Churista = () => {
     }
   }
 
+  //handle change function
+  const handleChange = (event) => {
+    updateSubmitData({
+      ...submitData,
+      [event.target.name]: event.target.value,
+    });
+    console.log(submitData);
+  };
+
   function handleOnClick(drink) {
     handleShow();
     setCurrentDrinkData({ ...drink });
   }
+
+  function handlePlaceOrderOnclick() {
+    setinsideModalShow(true);
+    if (IsIced) {
+      updateSubmitData({
+        drinkname: currentDrinkData.drinkname,
+        isIced: "Iced",
+      });
+    } else {
+      updateSubmitData({
+        drinkname: currentDrinkData.drinkname,
+        isIced: "Hot",
+      });
+    }
+  }
+
+  const handleOnsubmit = (event) => {
+    event.preventDefault();
+    sendEmail(submitData);
+    console.log(submitData);
+  };
 
   const handleIsIcedOnClick = (value) => {
     setIsIced(value);
@@ -108,7 +165,38 @@ const Churista = () => {
                     Iced
                   </ToggleButton>
                 </ToggleButtonGroup>
-                <Button className="order-button boxshadow">Place order</Button>
+                <Button
+                  className="order-button boxshadow"
+                  onClick={() => handlePlaceOrderOnclick()}
+                >
+                  Place order
+                </Button>
+                <Modal
+                  show={insideModalshow}
+                  onHide={() => setinsideModalShow(false)}
+                  id={currentDrinkData.id}
+                  centered
+                  className="insideModal"
+                >
+                  <Form onChange={handleChange} onSubmit={handleOnsubmit}>
+                    <Row className="align-items-center">
+                      <Form.Control
+                        size="lg"
+                        type="text"
+                        name="name"
+                        placeholder="Please type your name."
+                        className="form"
+                      />
+                    </Row>
+                    <Row className="align-items-center">
+                      <div className="Button">
+                        <Button type="submit" className="mb-2">
+                          Submit
+                        </Button>
+                      </div>
+                    </Row>
+                  </Form>
+                </Modal>
               </div>
             </div>
           </div>
