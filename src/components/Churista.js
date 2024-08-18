@@ -80,9 +80,11 @@ const Churista = () => {
   function handleOnClick(drink) {
     handleShow();
     setCurrentDrinkData({ ...drink });
+    console.log(currentDrinkData);
   }
 
-  function handlePlaceOrderOnclick() {
+  const handlePlaceOrderOnclick = (event) => {
+    event.preventDefault();
     setinsideModalShow(true);
     if (IsIced) {
       updateSubmitData({
@@ -95,13 +97,14 @@ const Churista = () => {
         isIced: "Hot",
       });
     }
-  }
+  };
 
   const handleOnsubmit = (event) => {
     event.preventDefault();
     sendEmail(submitData);
     console.log(submitData);
     handleShow();
+    setinsideModalShow(false);
   };
 
   const handleIsIcedOnClick = (value) => {
@@ -125,77 +128,85 @@ const Churista = () => {
         <Modal.Body>
           <CloseButton variant="white" onClick={() => handleShow()} />
           <div>
-            {!IsIced && (
-              <img
-                src={currentDrinkData.image}
-                alt=""
-                className="modal-coffee-image"
-              ></img>
-            )}
-            {IsIced && (
-              <img
-                src={currentDrinkData.icedimage}
-                alt=""
-                className="modal-iced-coffee-image"
-              ></img>
-            )}
-
+            <img
+              src={currentDrinkData.image}
+              alt=""
+              className={IsIced ? "hiddenimage" : "modal-coffee-image "}
+              key={currentDrinkData.image}
+            ></img>
+            <img
+              src={currentDrinkData.icedimage}
+              alt=""
+              className={IsIced ? "modal-iced-coffee-image" : " hiddenimage"}
+              key={currentDrinkData.icedimage}
+            ></img>
             <div className="drink-name">{currentDrinkData.drinkname}</div>
             <div>
-              <div className="Button">
-                <ToggleButtonGroup
-                  type="radio"
-                  name="options"
-                  defaultValue={false}
-                >
-                  <ToggleButton
-                    id="hot"
-                    value={false}
-                    className={IsIced ? "boxshadow" : ""}
-                    onClick={() => handleIsIcedOnClick(false)}
+              {currentDrinkData.id !== "affogato" && (
+                <div className="Button">
+                  <ToggleButtonGroup
+                    type="radio"
+                    name="options"
+                    defaultValue={false}
                   >
-                    Hot
-                  </ToggleButton>
-                  <ToggleButton
-                    id="iced"
-                    style={{ marginLeft: "5rem" }}
-                    value={true}
-                    className={IsIced ? "" : "boxshadow"}
-                    onClick={() => handleIsIcedOnClick(true)}
+                    <ToggleButton
+                      id="hot"
+                      value={false}
+                      className={IsIced ? "boxshadow" : ""}
+                      onClick={() => handleIsIcedOnClick(false)}
+                    >
+                      Hot
+                    </ToggleButton>
+                    <ToggleButton
+                      id="iced"
+                      style={{ marginLeft: "5rem" }}
+                      value={true}
+                      className={IsIced ? "" : "boxshadow"}
+                      onClick={() => handleIsIcedOnClick(true)}
+                    >
+                      Iced
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                  <Button
+                    className="order-button boxshadow"
+                    onClick={handlePlaceOrderOnclick}
                   >
-                    Iced
-                  </ToggleButton>
-                </ToggleButtonGroup>
-                <Button
-                  className="order-button boxshadow"
-                  onClick={() => handlePlaceOrderOnclick()}
-                >
-                  Place order
-                </Button>
+                    Place order
+                  </Button>
+                </div>
+              )}
+              {currentDrinkData.id === "affogato" && (
+                <div className="Button">
+                  <Button
+                    className="order-button boxshadow"
+                    onClick={handlePlaceOrderOnclick}
+                  >
+                    Place order
+                  </Button>
+                </div>
+              )}
+              <div>
                 <Modal
                   show={insideModalshow}
                   onHide={() => setinsideModalShow(false)}
                   id={currentDrinkData.id}
-                  centered
                   className="insideModal"
                 >
                   <Form onChange={handleChange} onSubmit={handleOnsubmit}>
-                    <Row className="align-items-center">
+                    <div className="submitform">
                       <Form.Control
                         size="lg"
                         type="text"
                         name="name"
-                        placeholder="Please type your name."
+                        placeholder="Please type your name here."
                         className="form"
                       />
-                    </Row>
-                    <Row className="align-items-center">
                       <div className="Button">
                         <Button type="submit" className="mb-2">
                           Submit
                         </Button>
                       </div>
-                    </Row>
+                    </div>
                   </Form>
                 </Modal>
               </div>

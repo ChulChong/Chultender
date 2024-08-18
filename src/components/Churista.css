@@ -19,7 +19,8 @@
 
 .block#cafemocha,
 .block#affogato,
-#cafemocha .modal-body {
+#cafemocha .modal-body,
+#affogato .modal-body {
   background-color: #d1a26c;
 }
 .block#whitemocha,
@@ -191,6 +192,13 @@
   margin-bottom: 8rem;
 }
 
+#affogato .modal-coffee-image {
+  width: 60%;
+  margin-top: 15rem;
+  margin-bottom: 12rem;
+  margin-left: 2rem;
+}
+
 .modal-body .btn-close {
   position: absolute;
   font-size: 4rem;
@@ -233,22 +241,37 @@
   box-shadow: 0 5px 50px 0 rgba(0, 0, 0, 0.2), 0 50px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
-.modal-dialog.modal-dialog-centered {
+.hiddenimage {
+  display: none;
+}
+
+.insideModal .modal-dialog {
+  margin-top: 64rem;
   max-width: 100%;
-  max-height: 40rem;
   font-size: 5rem;
 }
+.insideModal .modal-content {
+  border-radius: 10rem 10rem 0 0;
+}
+
+.submitform {
+  height: 35rem;
+}
+
 .form.form-control.form-control-lg {
+  margin-top: 12rem;
   text-align: center;
-  font-size: 5rem;
+  font-size: 4.5rem;
+  margin-bottom: 2rem;
+  border: 0;
 }
 
 .mb-2.btn.btn-primary {
   text-align: center;
   font-size: 5rem;
   padding-top: 0rem;
-  margin-left: 0rem;
-  width: 100%;
+  margin-left: 1.5rem;
+  width: 95%;
   height: 10rem;
   color: white;
   --bs-btn-color: #3f2e37;
