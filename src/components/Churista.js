@@ -43,7 +43,7 @@ const Churista = () => {
     emailjs
       .send(
         "service_y4u4u9z",
-        "template_dyo5unf",
+        "template_kepzcvg",
         submitData,
         "uucLbm7oCkBcst-pE"
       )
@@ -101,6 +101,7 @@ const Churista = () => {
     event.preventDefault();
     sendEmail(submitData);
     console.log(submitData);
+    handleShow();
   };
 
   const handleIsIcedOnClick = (value) => {
