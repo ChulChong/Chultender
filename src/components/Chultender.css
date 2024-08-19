@@ -81,6 +81,11 @@
   color: rgb(255, 213, 135);
 }
 
+#amarettosour {
+  background-color: #d66b29;
+  color: rgb(241, 255, 225);
+}
+
 .picture#godfather {
   height: 25rem;
 }
@@ -122,7 +127,8 @@
   height: 30rem;
   width: 20rem;
 }
-#wildflower {
+#wildflower,
+.outer#amarettosour {
   background-color: #fc9a6d;
   color: rgb(250, 201, 110);
 }

@@ -6,6 +6,7 @@ import mojito from "../image/Mojito.png";
 import pinacolada from "../image/PinaColada.png";
 import whiskeysour from "../image/WhiskeySour.png";
 import wildflower from "../image/WildFlower.png";
+import amarettosour from "../image/amarettosour.png";
 
 export const recipes = [
   {
@@ -98,5 +99,17 @@ export const recipes = [
     ],
     details: "",
     image: wildflower,
+  },
+  {
+    id: "amarettosour",
+    name: "Amaretto Sour",
+    ingredients: [
+      "2 oz Amaretto",
+      "3/4 oz Lemon Juice",
+      "3/4 oz Simple Syrup",
+      "1 Egg White",
+    ],
+    details: "Dry shaking then ice shaking",
+    image: amarettosour,
   },
 ];
