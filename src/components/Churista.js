@@ -8,7 +8,6 @@ import Button from "react-bootstrap/Button";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
 import emailjs from "@emailjs/browser";
 
 const Churista = () => {

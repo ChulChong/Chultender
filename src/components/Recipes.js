@@ -106,7 +106,7 @@ export const recipes = [
     ingredients: [
       "2 oz Amaretto",
       "3/4 oz Lemon Juice",
-      "3/4 oz Simple Syrup",
+      "1/4 oz Simple Syrup",
       "1 Egg White",
     ],
     details: "Dry shaking then ice shaking",
