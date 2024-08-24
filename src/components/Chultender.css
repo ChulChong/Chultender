@@ -81,11 +81,6 @@
   color: rgb(255, 213, 135);
 }
 
-#amarettosour {
-  background-color: #d66b29;
-  color: rgb(241, 255, 225);
-}
-
 .picture#godfather {
   height: 25rem;
 }
@@ -136,4 +131,20 @@
 .picture#wildflower {
   height: 25rem;
   width: 20rem;
+}
+
+#amarettosour,
+.outer#sexymild {
+  background-color: #d66b29;
+  color: rgb(241, 255, 225);
+}
+
+#sexymild {
+  background-color: #a7c5bd;
+  color: aliceblue;
+}
+
+.picture#sexymild {
+  height: 35rem;
+  margin-top: -3rem;
 }

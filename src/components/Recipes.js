@@ -7,6 +7,7 @@ import pinacolada from "../image/PinaColada.png";
 import whiskeysour from "../image/WhiskeySour.png";
 import wildflower from "../image/WildFlower.png";
 import amarettosour from "../image/amarettosour.png";
+import sexymild from "../image/sexymild.png";
 
 export const recipes = [
   {
@@ -68,8 +69,8 @@ export const recipes = [
     name: "Piña Colada",
     ingredients: [
       "1 oz White Rum",
-      "3 oz Pineapple Juice",
-      "1 oz Coconut Milk",
+      "2 oz Pineapple Juice",
+      "3 oz Piña colada mix",
     ],
     details:
       "Blend all the ingredients with ice in an electric blender, pour into a large goblet or Hurricane glass and serve with straw. Garnish with a slice of pineapple or with a cocktail cherry.",
@@ -111,5 +112,17 @@ export const recipes = [
     ],
     details: "Dry shaking then ice shaking",
     image: amarettosour,
+  },
+  {
+    id: "sexymild",
+    name: "Sexy Mild",
+    ingredients: [
+      "1 oz Blue Curaço",
+      "3 oz Piña colada mix",
+      "3 oz Milk",
+      "1 oz Sweet & Sour Mix",
+    ],
+    details: "",
+    image: sexymild,
   },
 ];

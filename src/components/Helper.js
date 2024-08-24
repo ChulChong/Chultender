@@ -3,7 +3,7 @@ const Helper = () => {
   var i;
 
   for (i = 0; i < acc.length; i++) {
-    if (acc[i].id === "amarettosour") {
+    if (acc[i].id === "sexymild") {
       acc[i].classList.toggle("active");
       var panel = acc[i].nextElementSibling;
       panel.style.maxHeight = panel.scrollHeight + 50 + "px";
