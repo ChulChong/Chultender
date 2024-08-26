@@ -4,14 +4,14 @@ import "./Chultender.css";
 import { recipes } from "./Recipes";
 import chultender from "../image/chultender.gif";
 
-function Hometender() {
+function Chultender() {
   useEffect(() => {
     Helper();
   });
   const dummyDataLoop = (dummydata) => {
     var rows = [];
     for (let i = 0; i < dummydata.length; i++) {
-      rows.push(<div>{dummydata[i]}</div>);
+      rows.push(<div key={i}>{dummydata[i]}</div>);
     }
     return rows;
   };
@@ -45,4 +45,4 @@ function Hometender() {
   );
 }
 
-export default Hometender;
+export default Chultender;
