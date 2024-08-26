@@ -19,10 +19,24 @@ function Chultender() {
   const listItems = recipes.map((drink) => (
     <div key={drink.id}>
       <div className="outer" id={drink.id}>
-        <button className="accordion" id={drink.id}>
+        <button
+          className="accordion"
+          id={drink.id}
+          style={{
+            backgroundColor: drink.backgroundcolor,
+            color: drink.fontcolor,
+          }}
+        >
           {drink.name}
         </button>
-        <div className="panel" id={drink.id}>
+        <div
+          className="panel"
+          id={drink.id}
+          style={{
+            backgroundColor: drink.backgroundcolor,
+            color: drink.fontcolor,
+          }}
+        >
           <div className="ingredients" id={drink.id}>
             <div>{dummyDataLoop(drink.ingredients)}</div>
           </div>

@@ -97,50 +97,28 @@
   margin-top: -3rem;
 }
 
-/*coloring*/
-
-#mintjulep,
-#mojito {
-  background-color: #819651;
-  color: rgb(241, 255, 225);
+.picture#kahluamilk {
+  height: 25rem;
 }
 
-#godfather {
-  background-color: #c0713f;
-  color: rgb(255, 213, 135);
+.picture#bluesapphire {
+  height: 40rem;
+  margin-left: -3rem;
 }
 
-#jackcoke {
-  background-color: #69392f;
-  color: rgb(232, 201, 201);
+.picture#cosmopolitan {
+  height: 30rem;
+  width: 25rem;
+  margin-left: 4rem;
 }
 
-#bluehawaii {
-  background-color: #4d91de;
-  color: rgb(126, 201, 255);
+.picture#midorisour {
+  height: 40rem;
+  width: 15rem;
 }
 
-#pinacolada {
-  background-color: #e6ddcb;
-  color: rgb(148, 148, 61);
-}
-
-#whiskeysour {
-  background-color: #d6be50;
-  color: rgb(245, 255, 180);
-}
-
-#wildflower {
-  background-color: #fc9a6d;
-  color: rgb(250, 201, 110);
-}
-
-#amarettosour {
-  background-color: #d66b29;
-  color: rgb(241, 255, 225);
-}
-
-#sexymild {
-  background-color: #a7c5bd;
-  color: aliceblue;
+.picture#shirleytemple {
+  height: 40rem;
+  width: 15rem;
+  margin-left: 1rem;
 }

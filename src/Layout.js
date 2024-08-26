@@ -18,7 +18,7 @@ const Layout = () => {
     <div>
       {
         <div className="main">
-          {
+          {isMobile && (
             <div className="image">
               <img
                 onClick={churistaOnClick}
@@ -34,10 +34,10 @@ const Layout = () => {
                 alt=""
               ></img>
             </div>
-          }
+          )}
         </div>
       }
-      {<p>This app is only supported on mobile</p>}
+      {!isMobile && <p>This app is only supported on mobile</p>}
     </div>
   );
 };
