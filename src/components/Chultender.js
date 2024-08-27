@@ -31,20 +31,22 @@ function Chultender() {
         </button>
         <div
           className="panel"
-          id={drink.id}
           style={{
             backgroundColor: drink.backgroundcolor,
             color: drink.fontcolor,
           }}
         >
-          <div className="ingredients" id={drink.id}>
+          <div className="ingredients">
             <div>{dummyDataLoop(drink.ingredients)}</div>
           </div>
-          <div className="details" id={drink.id}>
-            {drink.details}
-          </div>
-          <div className="picture-wrapper" id={drink.id}>
-            <img className="picture" src={drink.image} id={drink.id} alt="" />
+          <div className="details">{drink.details}</div>
+          <div className="picture-wrapper">
+            <img
+              className={"picture " + drink.cup}
+              src={drink.image}
+              alt=""
+              id={drink.id}
+            />
           </div>
         </div>
       </div>

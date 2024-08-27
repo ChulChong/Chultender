@@ -3,7 +3,7 @@ import godfather from "../image/GodFather.png";
 import jackcoke from "../image/JackCoke.png";
 import bluehawaii from "../image/BlueHawaii.png";
 import mojito from "../image/Mojito.png";
-import pinacolada from "../image/PinaColada.png";
+import pinacolada from "../image/pinacolada.png";
 import whiskeysour from "../image/WhiskeySour.png";
 import wildflower from "../image/WildFlower.png";
 import amarettosour from "../image/amarettosour.png";
@@ -32,6 +32,7 @@ export const recipes = [
     image: mintjulep,
     backgroundcolor: "#819651",
     fontcolor: "rgb(241, 255, 225)",
+    cup: "julep",
   },
   {
     id: "godfather",
@@ -42,6 +43,7 @@ export const recipes = [
     image: godfather,
     backgroundcolor: "#c0713f",
     fontcolor: "rgb(255, 213, 135)",
+    cup: "ontherock",
   },
   {
     id: "jackcoke",
@@ -51,6 +53,7 @@ export const recipes = [
     image: jackcoke,
     backgroundcolor: "#69392f",
     fontcolor: "rgb(232, 201, 201)",
+    cup: "highball",
   },
   {
     id: "bluehawaii",
@@ -65,6 +68,7 @@ export const recipes = [
     image: bluehawaii,
     backgroundcolor: "#4d91de",
     fontcolor: "rgb(126, 201, 255)",
+    cup: "hurricane",
   },
   {
     id: "mojito",
@@ -81,6 +85,7 @@ export const recipes = [
     image: mojito,
     backgroundcolor: "#819651",
     fontcolor: "rgb(241, 255, 225)",
+    cup: "highball",
   },
   {
     id: "pinacolada",
@@ -95,6 +100,7 @@ export const recipes = [
     image: pinacolada,
     backgroundcolor: "#e6ddcb",
     fontcolor: "rgb(148, 148, 61)",
+    cup: "hurricane",
   },
   {
     id: "whiskeysour",
@@ -110,6 +116,7 @@ export const recipes = [
     image: whiskeysour,
     backgroundcolor: "#d6be50",
     fontcolor: "rgb(245, 255, 180)",
+    cup: "martini",
   },
   {
     id: "wildflower",
@@ -124,6 +131,7 @@ export const recipes = [
     image: wildflower,
     backgroundcolor: "#fc9a6d",
     fontcolor: "rgb(250, 201, 110)",
+    cup: "ontherock",
   },
   {
     id: "amarettosour",
@@ -138,6 +146,7 @@ export const recipes = [
     image: amarettosour,
     backgroundcolor: "#d66b29",
     fontcolor: "rgb(241, 255, 225)",
+    cup: "coupe",
   },
   {
     id: "sexymild",
@@ -152,6 +161,7 @@ export const recipes = [
     image: sexymild,
     backgroundcolor: "#a7c5bd",
     fontcolor: "aliceblue",
+    cup: "snifter",
   },
   {
     id: "kahluamilk",
@@ -167,6 +177,7 @@ export const recipes = [
     image: kahluamlik,
     backgroundcolor: "#814118",
     fontcolor: "#ffffff",
+    cup: "ontherock",
   },
   {
     id: "bluesapphire",
@@ -182,13 +193,14 @@ export const recipes = [
     image: bluesapphire,
     backgroundcolor: "#416062",
     fontcolor: "#ffffff",
+    cup: "flute",
   },
   {
     id: "cosmopolitan",
-    name: "Cosmopolitan (discontinued)",
+    name: "Cosmopolitan",
     ingredients: [
       "1 1/3 oz Citron Vodka",
-      "1/2 oz CoinTreau",
+      "1/2 oz Triple sec",
       "1/2 oz Lime Juice",
       "1 oz CranBerry Juice",
     ],
@@ -196,6 +208,7 @@ export const recipes = [
     image: cosmopolitan,
     backgroundcolor: "#cc343f",
     fontcolor: "#ffffff",
+    cup: "martini",
   },
   {
     id: "midorisour",
@@ -214,6 +227,7 @@ export const recipes = [
     image: midorisour,
     backgroundcolor: "#4c574e",
     fontcolor: "#ffffff",
+    cup: "highball",
   },
   {
     id: "orgasm",
@@ -223,6 +237,7 @@ export const recipes = [
     image: orgasm,
     backgroundcolor: "#bbb292",
     fontcolor: "#515151",
+    cup: "coupe",
   },
   {
     id: "dohwa",
@@ -241,6 +256,7 @@ export const recipes = [
     image: dohwa,
     backgroundcolor: "#e4ddcb",
     fontcolor: "#515151",
+    cup: "coupe",
   },
   {
     id: "shirleytemple",
@@ -254,5 +270,6 @@ export const recipes = [
     image: shirleytemple,
     backgroundcolor: "#ab526b",
     fontcolor: "white",
+    cup: "highball",
   },
 ];

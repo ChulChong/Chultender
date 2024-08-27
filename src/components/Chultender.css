@@ -12,13 +12,13 @@
   font-weight: 600;
   border-radius: 50px 50px 0 0;
 }
-.neonsign {
-  width: 100%;
+
+.outer {
+  margin-top: -1px;
 }
 
-.outer#mintjulep {
-  margin-top: 0;
-  border-radius: 50px 50px 0 0;
+.neonsign {
+  width: 100%;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -36,7 +36,7 @@
   max-height: 0;
   overflow: hidden;
   height: 100%;
-  margin-top: -2px;
+  margin-top: -3px;
   border: none;
   outline: none;
   transition: max-height 0.2s ease-out;
@@ -50,17 +50,17 @@
   font-size: 3rem;
   font-weight: bold;
 }
+
 .details {
   font-size: 2.5rem;
   text-align: left;
   padding: 5rem;
 }
+
 .picture {
-  margin-left: 1rem;
-  width: 20rem;
-  height: 30rem;
-  text-align: center;
+  margin-left: 2rem;
 }
+
 .picture-wrapper {
   display: block;
   text-align: center;
@@ -68,57 +68,41 @@
 
 /*individual picture adjustment*/
 
-.picture#godfather {
-  height: 25rem;
-}
-
-.picture#jackcoke {
-  height: 35rem;
-  width: 15rem;
-}
-.picture#mojito {
-  height: 40rem;
-  width: 20rem;
-  margin-left: 3rem;
-}
-
-.picture#whiskeysour {
+.ontherock {
   height: 30rem;
-  width: 20rem;
+  margin-left: 0rem;
 }
 
-.picture#wildflower {
-  height: 25rem;
-  width: 20rem;
-}
-
-.picture#sexymild {
-  height: 35rem;
-  margin-top: -3rem;
-}
-
-.picture#kahluamilk {
-  height: 25rem;
-}
-
-.picture#bluesapphire {
+.highball {
   height: 40rem;
-  margin-left: -3rem;
+  margin: 0rem;
 }
 
-.picture#cosmopolitan {
-  height: 30rem;
-  width: 25rem;
+.flute {
+  margin-left: -2rem;
+  height: 35rem;
+}
+
+.highball#mojito {
+  margin-left: 2rem;
+}
+
+.highball#midorisour {
+  margin-left: 0rem;
+}
+
+.coupe {
+  margin-left: 0;
+}
+
+.coupe#amarettosour {
+  margin-left: 2rem;
+}
+
+.martini {
   margin-left: 4rem;
 }
 
-.picture#midorisour {
-  height: 40rem;
-  width: 15rem;
-}
-
-.picture#shirleytemple {
-  height: 40rem;
-  width: 15rem;
-  margin-left: 1rem;
+.martini#whiskeysour {
+  margin-left: 0rem;
 }
