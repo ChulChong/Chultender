@@ -26,6 +26,15 @@ const Helper = () => {
     }
     //open accordion on last child
 
+    var x = document.getElementById(acc[i].id);
+    if (recipes[i].IsShow) {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+
+    //disable unavailable cocktail
+
     acc[i].addEventListener("click", function () {
       this.classList.toggle("active");
       var panel = this.nextElementSibling;
@@ -43,6 +52,10 @@ const Helper = () => {
       }
     });
     //accordion open onclick function
+
+    /*TODO
+    1. filter function by ingredients
+    */
   }
 };
 

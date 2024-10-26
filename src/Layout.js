@@ -16,27 +16,25 @@ const Layout = () => {
 
   return (
     <div>
-      {
+      {isMobile && (
         <div className="main">
-          {isMobile && (
-            <div className="image">
-              <img
-                onClick={churistaOnClick}
-                className="img"
-                src={barista}
-                alt=""
-              ></img>
+          <div className="image">
+            <img
+              onClick={churistaOnClick}
+              className="img"
+              src={barista}
+              alt=""
+            ></img>
 
-              <img
-                onClick={chultenderOnClick}
-                className="img2"
-                src={bartender}
-                alt=""
-              ></img>
-            </div>
-          )}
+            <img
+              onClick={chultenderOnClick}
+              className="img2"
+              src={bartender}
+              alt=""
+            ></img>
+          </div>
         </div>
-      }
+      )}
       {!isMobile && <p>This app is only supported on mobile</p>}
     </div>
   );
