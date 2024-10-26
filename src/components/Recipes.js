@@ -31,6 +31,7 @@ import tomcollins from "../image/TomCollins.png";
 import traditionalelderfashioned from "../image/TraditionalElderfashioned.png";
 import hugospritz from "../image/HugoSpritz.png";
 import espressomartini from "../image/EspressoMartini.png";
+import ginandtonic from "../image/GinAndTonic.png";
 
 export const recipes = [
   {
@@ -543,5 +544,16 @@ export const recipes = [
     image: bacardi,
     cup: "martini",
     IsShow: false,
+  },
+  {
+    id: "GinandTonic",
+    name: "Gin and Tonic",
+    ingredients: ["1 1/2 Gin", "1/2 Lemon Juice", "Tonic Water Fill"],
+    details: "",
+    backgroundcolor: "#C9B167",
+    fontcolor: "#515151",
+    image: ginandtonic,
+    cup: "highball",
+    IsShow: true,
   },
 ];
