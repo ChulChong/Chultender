@@ -15,6 +15,22 @@ import midorisour from "../image/midorisour.png";
 import orgasm from "../image/orgasm.png";
 import shirleytemple from "../image/shirleytemple.png";
 import dohwa from "../image/dohwa.png";
+import bacardi from "../image/Bacardi.png";
+import cloverclub from "../image/CloverClub.png";
+import daiquiri from "../image/Daiquiri.png";
+import french75 from "../image/French75.png";
+import ink from "../image/Ink.png";
+import japaneseslipper from "../image/JapaneseSlipper.png";
+import moscowmule from "../image/MoscowMule.png";
+import newyorksour from "../image/NewyorkSour.png";
+import oldfashioned from "../image/OldFashioned.png";
+import gimlet from "../image/Gimlet.png";
+import frenchgimlet from "../image/FrenchGimlet.png";
+import scotchjamsour from "../image/ScotchJamSour.png";
+import tomcollins from "../image/TomCollins.png";
+import traditionalelderfashioned from "../image/TraditionalElderfashioned.png";
+import hugospritz from "../image/HugoSpritz.png";
+import espressomartini from "../image/EspressoMartini.png";
 
 export const recipes = [
   {
@@ -90,7 +106,7 @@ export const recipes = [
     backgroundcolor: "#819651",
     fontcolor: "rgb(241, 255, 225)",
     cup: "highball",
-    IsShow: true,
+    IsShow: false,
   },
   {
     id: "pinacolada",
@@ -299,9 +315,10 @@ export const recipes = [
       "Red wine top fill",
     ],
     details: "",
+    image: newyorksour,
     backgroundcolor: "#DEAB2C",
     fontcolor: "#515151",
-    cup: "",
+    cup: "ontherock",
     IsShow: true,
   },
   {
@@ -309,9 +326,10 @@ export const recipes = [
     name: "Gimlet",
     ingredients: ["1 1/2 oz Gin", "1/3 oz Simple Syrup", "3/4 oz Lime Juice"],
     details: "",
+    image: gimlet,
     backgroundcolor: "#E8D84C",
     fontcolor: "#515151",
-    cup: "",
+    cup: "coupe",
     IsShow: true,
   },
   {
@@ -319,9 +337,10 @@ export const recipes = [
     name: "French Gimlet",
     ingredients: ["2 oz Gin", "1 oz St. Germain", "1/2 Lime Juice"],
     details: "",
+    image: frenchgimlet,
     backgroundcolor: "#F5EE90",
     fontcolor: "#515151",
-    cup: "",
+    cup: "coupe",
     IsShow: true,
   },
   {
@@ -334,9 +353,10 @@ export const recipes = [
       "8 mint leaves",
     ],
     details: "",
+    image: hugospritz,
     backgroundcolor: "#EBCF78",
     fontcolor: "#515151",
-    cup: "",
+    cup: "snifter",
     IsShow: false,
   },
   {
@@ -349,9 +369,10 @@ export const recipes = [
       "1 Maraschino Cherry",
     ],
     details: "",
+    image: japaneseslipper,
     backgroundcolor: "#8DA26E",
     fontcolor: "white",
-    cup: "",
+    cup: "martini",
     IsShow: false,
   },
   {
@@ -363,9 +384,10 @@ export const recipes = [
       "2 Dash Angostura Bitter",
     ],
     details: "",
+    image: traditionalelderfashioned,
     backgroundcolor: "#BE4B38",
     fontcolor: "white",
-    cup: "",
+    cup: "ontherock",
     IsShow: true,
   },
   {
@@ -379,9 +401,10 @@ export const recipes = [
       "3 Whole Coffee Bean",
     ],
     details: "",
+    image: espressomartini,
     backgroundcolor: "#762011",
     fontcolor: "white",
-    cup: "",
+    cup: "coupe",
     IsShow: false,
   },
   {
@@ -391,7 +414,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#263326",
     fontcolor: "white",
-    cup: "",
+    image: moscowmule,
+    cup: "julep",
     IsShow: false,
   },
   {
@@ -401,7 +425,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#8DA26E",
     fontcolor: "white",
-    cup: "",
+    image: daiquiri,
+    cup: "coupe",
     IsShow: false,
   },
   {
@@ -416,7 +441,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#E8D84C",
     fontcolor: "#515151",
-    cup: "",
+    image: tomcollins,
+    cup: "highball",
     IsShow: true,
   },
   {
@@ -431,7 +457,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#B2C4BC",
     fontcolor: "#515151",
-    cup: "",
+    image: french75,
+    cup: "flute",
     IsShow: false,
   },
   {
@@ -446,7 +473,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#AB526B",
     fontcolor: "white",
-    cup: "",
+    image: cloverclub,
+    cup: "martini",
     IsShow: true,
   },
   {
@@ -462,6 +490,7 @@ export const recipes = [
     details: "",
     backgroundcolor: "#524656",
     fontcolor: "white",
+    image: ink,
     cup: "",
     IsShow: false,
   },
@@ -476,9 +505,10 @@ export const recipes = [
       "1 dash Bitter",
     ],
     details: "",
+    image: scotchjamsour,
     backgroundcolor: "#EB7B5A",
     fontcolor: "white",
-    cup: "",
+    cup: "ontherock",
     IsShow: true,
   },
   {
@@ -494,7 +524,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#B0420B",
     fontcolor: "white",
-    cup: "",
+    image: oldfashioned,
+    cup: "ontherock",
     IsShow: true,
   },
   {
@@ -509,7 +540,8 @@ export const recipes = [
     details: "",
     backgroundcolor: "#EB7B5A",
     fontcolor: "white",
-    cup: "",
+    image: bacardi,
+    cup: "martini",
     IsShow: false,
   },
 ];

@@ -98,6 +98,10 @@
 .coupe#amarettosour {
   margin-left: 2rem;
 }
+.coupe#EspressoMartini {
+  margin-left: 2rem;
+  width: 500px;
+}
 
 .martini {
   margin-left: 4rem;
@@ -105,4 +109,12 @@
 
 .martini#whiskeysour {
   margin-left: 0rem;
+}
+
+.martini#JapaneseSlipper {
+  margin-left: 0rem;
+}
+
+.julep {
+  margin-left: 4rem;
 }
