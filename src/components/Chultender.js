@@ -1,13 +1,22 @@
 import Helper from "./Helper";
 import { useEffect } from "react";
 import "./Chultender.css";
+import { useNavigate } from "react-router-dom";
 import { recipes } from "./Recipes";
 import chultender from "../image/chultender.gif";
+import Button from "react-bootstrap/Button";
 
 function Chultender() {
+  const navigate = useNavigate();
+
+  const AdminOnClick = () => {
+    navigate("/Admin");
+  };
+
   useEffect(() => {
     Helper();
   });
+
   const dummyDataLoop = (dummydata) => {
     var rows = [];
     for (let i = 0; i < dummydata.length; i++) {
@@ -56,6 +65,9 @@ function Chultender() {
   return (
     <div style={{ backgroundColor: "#0A08AC" }}>
       <img src={chultender} className="neonsign" alt="" />
+      <div>
+        <Button onClick={AdminOnClick}>admin</Button>
+      </div>
       {listItems}
     </div>
   );

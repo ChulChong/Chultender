@@ -16,7 +16,7 @@ const Layout = () => {
 
   return (
     <div>
-      {isMobile && (
+      {
         <div className="main">
           <div className="image">
             <img
@@ -34,7 +34,7 @@ const Layout = () => {
             ></img>
           </div>
         </div>
-      )}
+      }
       {!isMobile && <p>This app is only supported on mobile</p>}
     </div>
   );

@@ -73,7 +73,7 @@ export const recipes = [
     backgroundcolor: "#69392f",
     fontcolor: "rgb(232, 201, 201)",
     cup: "highball",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "bluehawaii",
@@ -89,7 +89,7 @@ export const recipes = [
     backgroundcolor: "#4d91de",
     fontcolor: "rgb(126, 201, 255)",
     cup: "hurricane",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "mojito",
@@ -107,7 +107,7 @@ export const recipes = [
     backgroundcolor: "#819651",
     fontcolor: "rgb(241, 255, 225)",
     cup: "highball",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "pinacolada",
@@ -123,7 +123,7 @@ export const recipes = [
     backgroundcolor: "#e6ddcb",
     fontcolor: "rgb(148, 148, 61)",
     cup: "hurricane",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "whiskeysour",
@@ -156,7 +156,7 @@ export const recipes = [
     backgroundcolor: "#fc9a6d",
     fontcolor: "rgb(250, 201, 110)",
     cup: "ontherock",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "amarettosour",
@@ -188,7 +188,7 @@ export const recipes = [
     backgroundcolor: "#a7c5bd",
     fontcolor: "aliceblue",
     cup: "snifter",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "kahluamilk",
@@ -205,7 +205,7 @@ export const recipes = [
     backgroundcolor: "#814118",
     fontcolor: "#ffffff",
     cup: "ontherock",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "bluesapphire",
@@ -222,7 +222,7 @@ export const recipes = [
     backgroundcolor: "#416062",
     fontcolor: "#ffffff",
     cup: "flute",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "cosmopolitan",
@@ -238,7 +238,7 @@ export const recipes = [
     backgroundcolor: "#cc343f",
     fontcolor: "#ffffff",
     cup: "martini",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "midorisour",
@@ -258,7 +258,7 @@ export const recipes = [
     backgroundcolor: "#4c574e",
     fontcolor: "#ffffff",
     cup: "highball",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "orgasm",
@@ -269,7 +269,7 @@ export const recipes = [
     backgroundcolor: "#bbb292",
     fontcolor: "#515151",
     cup: "coupe",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "dohwa",
@@ -289,7 +289,7 @@ export const recipes = [
     backgroundcolor: "#e4ddcb",
     fontcolor: "#515151",
     cup: "coupe",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "shirleytemple",
@@ -358,7 +358,7 @@ export const recipes = [
     backgroundcolor: "#EBCF78",
     fontcolor: "#515151",
     cup: "snifter",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "JapaneseSlipper",
@@ -374,7 +374,7 @@ export const recipes = [
     backgroundcolor: "#8DA26E",
     fontcolor: "white",
     cup: "martini",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "TraditionalElderfashioned",
@@ -406,7 +406,7 @@ export const recipes = [
     backgroundcolor: "#762011",
     fontcolor: "white",
     cup: "coupe",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "MoscowMule",
@@ -417,7 +417,7 @@ export const recipes = [
     fontcolor: "white",
     image: moscowmule,
     cup: "julep",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "Daiquiri",
@@ -428,7 +428,7 @@ export const recipes = [
     fontcolor: "white",
     image: daiquiri,
     cup: "coupe",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "TomCollins",
@@ -460,7 +460,7 @@ export const recipes = [
     fontcolor: "#515151",
     image: french75,
     cup: "flute",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "CloverClub",
@@ -493,7 +493,7 @@ export const recipes = [
     fontcolor: "white",
     image: ink,
     cup: "",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "ScotchJamSour",
@@ -543,7 +543,7 @@ export const recipes = [
     fontcolor: "white",
     image: bacardi,
     cup: "martini",
-    IsShow: false,
+    IsShow: true,
   },
   {
     id: "GinandTonic",
