@@ -88,22 +88,61 @@ public class GetIngredients implements RequestHandler<Map<String, Object>, APIGa
     private String queryDatabase() throws SQLException {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + LOCAL_DB_PATH);
              Statement stmt = conn.createStatement()) {
-
+            //get Ingredients
             ResultSet rs = stmt.executeQuery("SELECT * FROM ingredients");
-            JSONArray jArray = new JSONArray();
+            JSONArray IngredientsArr = new JSONArray();
             while (rs.next()) {
-                Integer id_json = rs.getInt("id");
+                int id_json = rs.getInt("id");
                 String name_json = rs.getString("name");
-                Boolean isActive_json = rs.getBoolean("IsActive");
+                boolean isActive_json = rs.getBoolean("IsActive");
+                boolean isMainLiqour_json = rs.getBoolean("isMainLiqour");
                 JSONObject jsonObject = new JSONObject();
+                jsonObject.put("isMainLiqour", isMainLiqour_json);
                 jsonObject.put("isActive", isActive_json);
                 jsonObject.put("name", name_json);
                 jsonObject.put("id", id_json);
-                jArray.put(jsonObject);
+                IngredientsArr.put(jsonObject);
+            }
+            //get recipes
+            ResultSet rs2 = stmt.executeQuery("SELECT * FROM recipes");
+            JSONArray recipesArr = new JSONArray();
+            while (rs.next()) {
+                int id_json = rs.getInt("id");
+                String name_json = rs.getString("name");
+                int mainLiqourId_json = rs.getInt("mainLiqourId");
+                String glass_json = rs.getString("glass");
+                String details_json = rs.getString("details");
+                boolean isActive_json = rs.getBoolean("isActive");
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("mainLiqourId", mainLiqourId_json);
+                jsonObject.put("isActive", isActive_json);
+                jsonObject.put("glass", glass_json);
+                jsonObject.put("details", details_json);
+                jsonObject.put("name", name_json);
+                jsonObject.put("id", id_json);
+                recipesArr.put(jsonObject);
+            }
+
+            //get recipe_ingredients
+            ResultSet rs3 = stmt.executeQuery("SELECT * FROM recipe_ingredients");
+            JSONArray recipe_ingredientsArr = new JSONArray();
+            while (rs.next()) {
+                int id_json = rs.getInt("id");
+                int recipe_id_json = rs.getInt("recipe_id");
+                int ingredient_id_json = rs.getInt("ingredient_id");
+                String size_json = rs.getString("size");
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("recipe_id", recipe_id_json);
+                jsonObject.put("ingredient_id", ingredient_id_json);
+                jsonObject.put("size", size_json);
+                jsonObject.put("id", id_json);
+                recipe_ingredientsArr.put(jsonObject);
             }
 
             JSONObject jObjDevice = new JSONObject();
-            jObjDevice.put("ingredients", jArray);
+            jObjDevice.put("ingredients", IngredientsArr);
+            jObjDevice.put("recipes", recipesArr);
+            jObjDevice.put("recipe_ingredients", recipe_ingredientsArr);
             System.out.println(jObjDevice);
 
             return jObjDevice.toString();
