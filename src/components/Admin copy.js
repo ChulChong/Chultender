@@ -1,7 +1,6 @@
 import Table from "react-bootstrap/Table";
 import React, { useState, useEffect } from "react";
 import "./Admin.css";
-import GetIngredients from "./API/GetIngredients";
 
 const Admin = () => {
   const [IngredientsData, setIngredientsData] = useState([]);
@@ -9,7 +8,6 @@ const Admin = () => {
   const [Recipe_IngredientsData, setRecipe_IngredientsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   //get Ingredeitns from API
   useEffect(() => {
     const fetchData = async () => {
