@@ -1,7 +1,8 @@
 
 # Welcome to Chultender.com
 
-- Churista for coffee menu feature has been updated
+- Churista (Chul + Barista) for coffee menu feature has been updated
+- Chultender (Chul + Bartender) for cocktail menu feature has been updated (currently working on backend)
 
 
 
