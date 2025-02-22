@@ -1,7 +1,7 @@
 import Table from "react-bootstrap/Table";
 import React, { useState, useEffect } from "react";
 import "./Admin.css";
-import GetIngredients from "./API/GetIngredients";
+import getAPIKeys from "./APIkeys/APIkeys";
 
 const Admin = () => {
   const [IngredientsData, setIngredientsData] = useState([]);
@@ -14,9 +14,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://oh8h3rgq94.execute-api.us-east-1.amazonaws.com/test/"
-        );
+        const response = await fetch(getAPIKeys().ingredientsAPI);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -50,9 +48,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://tlm0pbhq4g.execute-api.us-east-1.amazonaws.com/Testing/GetRecipes"
-        );
+        const response = await fetch(getAPIKeys().recipesAPI);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -84,9 +80,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://7p0alm97tb.execute-api.us-east-1.amazonaws.com/test/"
-        );
+        const response = await fetch(getAPIKeys().recipeIngredientsAPI);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
