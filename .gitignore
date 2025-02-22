@@ -7,6 +7,8 @@
 /.firebase
 /.github
 
+# specific files
+/src/components/APIkeys/APIkeys.js
 # testing
 /coverage
 
