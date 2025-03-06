@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { recipes } from "./Recipes";
 import chultender from "../image/chultender.gif";
 import Button from "react-bootstrap/Button";
-import RecipeList from "./RecipeList";
 
 function Chultender() {
   const navigate = useNavigate();
