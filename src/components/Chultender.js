@@ -65,9 +65,10 @@ function Chultender() {
   return (
     <div style={{ backgroundColor: "#0A08AC" }}>
       <img src={chultender} className="neonsign" alt="" />
+      {/*
       <div>
         <Button onClick={AdminOnClick}>admin</Button>
-      </div>
+      </div>*/}
       {listItems}
     </div>
   );

@@ -1,16 +1,16 @@
-import Table from "react-bootstrap/Table";
-import React, { useState, useEffect } from "react";
-import "./Admin.css";
+import { useState, useEffect } from "react";
 import getAPIKeys from "./APIkeys/APIkeys";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
+import Accordion from "react-bootstrap/Accordion";
 
 const Admin = () => {
   const [IngredientsData, setIngredientsData] = useState([]);
-  const [RecipesData, setRecipesData] = useState([]);
-  const [Recipe_IngredientsData, setRecipe_IngredientsData] = useState([]);
+  const [updatedIngredients, setUpdatedIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //get Ingredeitns from API
+  // Fetch ingredients from API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,20 +19,13 @@ const Admin = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const jsonData = await response.json();
-        console.log("Raw API Response:", jsonData);
-
-        // Parse body only if it's a string
         const parsedData =
           typeof jsonData.body === "string"
             ? JSON.parse(jsonData.body)
             : jsonData.body;
-
-        console.log("Parsed Data:", parsedData);
 
         if (parsedData.ingredients) {
           setIngredientsData(parsedData.ingredients);
-        } else {
-          console.warn("No 'ingredients' key found in response");
         }
       } catch (e) {
         setError(e);
@@ -44,164 +37,101 @@ const Admin = () => {
     fetchData();
   }, []);
 
-  //Get Recipes from API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(getAPIKeys().recipesAPI);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const jsonData = await response.json();
-        console.log("Raw API Response:", jsonData);
-
-        // Parse body only if it's a string
-        const parsedData =
-          typeof jsonData.body === "string" ? JSON.parse(jsonData) : jsonData;
-
-        console.log("Parsed Data:", parsedData);
-
-        if (parsedData.recipes) {
-          setRecipesData(parsedData.recipes);
-        } else {
-          console.warn("No 'recipes' key found in response");
-        }
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
+  // Toggle isActive
+  const toggleIsActive = (id) => {
+    const updatedIngredientsList = IngredientsData.map((item) => {
+      if (item.id === id) {
+        const updatedItem = { ...item, isActive: !item.isActive };
+        setUpdatedIngredients((prev) => [
+          ...prev.filter((i) => i.id !== id),
+          updatedItem,
+        ]); // ✅ Track changes
+        return updatedItem;
       }
-    };
+      return item;
+    });
+    setIngredientsData(updatedIngredientsList);
+  };
 
-    fetchData();
-  }, []);
-
-  //Get Recipe_Ingredients from API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(getAPIKeys().recipeIngredientsAPI);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const jsonData = await response.json();
-        console.log("Raw API Response:", jsonData);
-
-        // Parse body only if it's a string
-        const parsedData =
-          typeof jsonData.body === "string"
-            ? JSON.parse(jsonData.body)
-            : jsonData.body;
-
-        console.log("Parsed Data:", parsedData);
-
-        if (parsedData.recipe_ingredients) {
-          setRecipe_IngredientsData(parsedData.recipe_ingredients);
-        } else {
-          console.warn("No 'recipe_ingredients' key found in response");
-        }
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
+  // Toggle isMainLiqour
+  const toggleIsMainLiqour = (id) => {
+    const updatedIngredientsList = IngredientsData.map((item) => {
+      if (item.id === id) {
+        const updatedItem = { ...item, isMainLiqour: !item.isMainLiqour };
+        setUpdatedIngredients((prev) => [
+          ...prev.filter((i) => i.id !== id),
+          updatedItem,
+        ]); // ✅ Track changes
+        return updatedItem;
       }
-    };
+      return item;
+    });
+    setIngredientsData(updatedIngredientsList);
+  };
 
-    fetchData();
-  }, []);
+  // Save only updated ingredients
+  const saveIngredients = async () => {
+    if (updatedIngredients.length === 0) {
+      console.warn("No ingredients modified. Skipping API call.");
+      return;
+    }
 
-  // 🔍 Log `data` only when it updates
-  useEffect(() => {
-    console.log("Updated Ingredients State Data:", IngredientsData);
-  }, [IngredientsData]);
-  useEffect(() => {
-    console.log("Updated Recipes State Data:", RecipesData);
-  }, [RecipesData]);
-  useEffect(() => {
-    console.log(
-      "Updated recipe_ingredients State Data:",
-      Recipe_IngredientsData
-    );
-  }, [Recipe_IngredientsData]);
+    console.log("🚀 Sending Updated Ingredients to API:", updatedIngredients);
 
-  if (loading) {
-    return <p>Loading data...</p>;
-  }
+    try {
+      const response = await fetch(getAPIKeys().ingredientsAPI, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedIngredients), // ✅ Send only updated ingredients
+      });
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+      console.log("🛠️ API Response:", response);
 
-  // Create a lookup object for mainLiqourId to name mapping
-  const mainLiqourLookup = IngredientsData.reduce((acc, ingredient) => {
-    acc[ingredient.id] = ingredient.name;
-    return acc;
-  }, {});
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      setUpdatedIngredients([]); // ✅ Clear after successful update
+    } catch (e) {
+      console.error("❌ Error saving ingredients:", e);
+      setError(e);
+    }
+  };
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <div>Ingredients</div>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>isActive</th>
-          <th>isMainLiqour</th>
-        </tr>
-      </thead>
-      <tbody>
-        {IngredientsData.map((item) => (
-          <tr key={item.id}>
-            <td>{item.id}</td>
-            <td>{item.name}</td>
-            <td>{item.isActive ? "✅" : "❌"}</td>
-            <td>{item.isMainLiqour ? "✅" : "❌"}</td>
-          </tr>
-        ))}
-      </tbody>
-      <div>Recipes</div>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>mainLiqour</th>
-          <th>glass</th>
-          <th>details</th>
-          <th>isActive</th>
-        </tr>
-      </thead>
-      <tbody>
-        {RecipesData.map((item) => (
-          <tr key={item.id}>
-            <td>{item.id}</td>
-            <td>{item.name}</td>
-            <td>{mainLiqourLookup[item.mainLiqourId]}</td>
-            <td>{item.glass}</td>
-            <td>{item.details}</td>
-            <td>{item.isActive ? "✅" : "❌"}</td>
-          </tr>
-        ))}
-      </tbody>
-      <div>recipe_ingredients</div>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>recipe_id</th>
-          <th>ingredient_id</th>
-          <th>size</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Recipe_IngredientsData.map((item) => (
-          <tr key={item.id}>
-            <td>{item.id}</td>
-            <td>{item.recipe_id}</td>
-            <td>{item.ingredient_id}</td>
-            <td>{item.size}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <div className="admin">
+      <Accordion>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Ingredients</Accordion.Header>
+          <Accordion.Body>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>isActive</th>
+                  <th>isMainLiqour</th>
+                </tr>
+              </thead>
+              <tbody>
+                {IngredientsData.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td onClick={() => toggleIsActive(item.id)}>
+                      {item.isActive ? "✅" : "❌"}
+                    </td>
+                    <td onClick={() => toggleIsMainLiqour(item.id)}>
+                      {item.isMainLiqour ? "✅" : "❌"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Button onClick={saveIngredients}>Save Changes</Button>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+    </div>
   );
 };
 

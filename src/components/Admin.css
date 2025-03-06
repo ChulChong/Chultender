@@ -1,3 +1,12 @@
 .table {
-  font-size: 40px;
+  font-size: 30px;
+}
+
+.admin .accordion {
+  font-weight: 300;
+}
+
+.admin .accordion-header,
+.admin .accordion-button {
+  font-size: 30px;
 }

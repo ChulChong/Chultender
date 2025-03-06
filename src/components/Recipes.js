@@ -32,6 +32,18 @@ import traditionalelderfashioned from "../image/TraditionalElderfashioned.png";
 import hugospritz from "../image/HugoSpritz.png";
 import espressomartini from "../image/EspressoMartini.png";
 import ginandtonic from "../image/GinAndTonic.png";
+import skydiving from "../image/SkyDiving.png";
+import manhattan from "../image/Manhattan.png";
+import whitelady from "../image/WhiteLady.png";
+import boulevardier from "../image/boulevardier.png";
+import negroni from "../image/Negroni.png";
+import aperolspritz from "../image/AperolSpritz.png";
+import woowoo from "../image/WooWoo.png";
+import peachcrush from "../image/PeachCrush.png";
+import cubalibre from "../image/CubaLibre.png";
+import crantini from "../image/crantini.png";
+import bluelady from "../image/BlueLady.png";
+import americanococktail from "../image/AmericanoCocktail.png";
 
 export const recipes = [
   {
@@ -95,11 +107,11 @@ export const recipes = [
     id: "mojito",
     name: "Mojito",
     ingredients: [
-      "1 1/3 oz White Rum",
-      "1 oz Fresh Lime Juice",
-      "6 Mint Sprigs",
-      "2 Tsp White Sugar",
-      "Soda Water",
+      "1 Tsp Sugar",
+      "1/2 oz Lime Juice",
+      "2 oz White Rum",
+      "10 Mint Leaves",
+      "Soda",
     ],
     details:
       "Muddle mint sprigs with sugar and lime juice. Add splash of soda water and fill glass with cracked ice. Pour rum and top with soda water. Garnish with sprig of mint leaves and lime slice. Serve with straw.",
@@ -553,6 +565,157 @@ export const recipes = [
     backgroundcolor: "#C9B167",
     fontcolor: "#515151",
     image: ginandtonic,
+    cup: "highball",
+    IsShow: true,
+  },
+  {
+    id: "Skydiving",
+    name: "Skydiving",
+    ingredients: ["1 Rum", "2/3 Blue Curaço", "1/3 lime Juice"],
+    details: "",
+    backgroundcolor: "#06B6E3",
+    fontcolor: "white",
+    image: skydiving,
+    cup: "martini",
+    IsShow: true,
+  },
+  {
+    id: "Manhattan",
+    name: "Manhattan",
+    ingredients: ["2 oz Rye Whiskey", "1 oz Sweet Vermouth", "2 dash Bitter"],
+    details: "",
+    backgroundcolor: "#820000",
+    fontcolor: "white",
+    image: manhattan,
+    cup: "martini",
+    IsShow: true,
+  },
+  {
+    id: "whitelady",
+    name: "White Lady",
+    ingredients: ["1 2/3 oz Gin", "2/3 oz Triple Sec", "2/3 oz Lemon Juice"],
+    details: "",
+    backgroundcolor: "#DCD59E",
+    fontcolor: "#515151",
+    image: whitelady,
+    cup: "martini",
+    IsShow: true,
+  },
+  {
+    id: "boulevardier",
+    name: "Boulevardier",
+    ingredients: [
+      "1 1/2 oz Bourbon",
+      "3/4 oz Sweet Vermouth",
+      "3/4 oz Campari",
+    ],
+    details: "",
+    backgroundcolor: "#DD0402",
+    fontcolor: "white",
+    image: boulevardier,
+    cup: "ontherock",
+    IsShow: true,
+  },
+  {
+    id: "negroni",
+    name: "Negroni",
+    ingredients: [
+      "1 oz Gin",
+      "1 oz Sweet Vermouth",
+      "1 oz Campari",
+      "Orange peel",
+    ],
+    details: "",
+    backgroundcolor: "#E11D12",
+    fontcolor: "white",
+    image: negroni,
+    cup: "ontherock",
+    IsShow: true,
+  },
+  {
+    id: "aperolspritz",
+    name: "Aperol Spritz",
+    ingredients: ["2 oz Aperol", "2 oz Prosecco", "1 oz Soda Water"],
+    details: "",
+    backgroundcolor: "#DF7201",
+    fontcolor: "white",
+    image: aperolspritz,
+    cup: "wine",
+    IsShow: true,
+  },
+  {
+    id: "woowoo",
+    name: "Woo Woo",
+    ingredients: ["1 1/2 oz Vodka", "1 oz Peach Tree", "2 oz Cranberry Juice"],
+    details: "",
+    backgroundcolor: "#A6060B",
+    fontcolor: "white",
+    image: woowoo,
+    cup: "highball",
+    IsShow: true,
+  },
+  {
+    id: "peachcrush",
+    name: "Peach Crush",
+    ingredients: [
+      "1 1/2 oz Peach Tree",
+      "2 oz Sweet and Sour Mix",
+      "Fill Cranberry Juice",
+    ],
+    details: "",
+    backgroundcolor: "#C8292F",
+    fontcolor: "white",
+    image: peachcrush,
+    cup: "highball",
+    IsShow: true,
+  },
+  {
+    id: "cuba_libre",
+    name: "Cuba Libre",
+    ingredients: ["2 oz Rum", "1/2 oz Lime Juice", "Coke Fill"],
+    details: "",
+    image: cubalibre,
+    backgroundcolor: "#611407",
+    fontcolor: "white",
+    cup: "highball",
+    IsShow: true,
+  },
+  {
+    id: "crantini",
+    name: "Crantini",
+    ingredients: ["3 oz Vodka", "1 oz Cranberry Juice", "1 oz Triple Sec"],
+    details: "",
+    image: crantini,
+    backgroundcolor: "#E8D84C",
+    fontcolor: "#515151",
+    cup: "martini",
+    IsShow: true,
+  },
+  {
+    id: "bluelady",
+    name: "Blue Lady",
+    ingredients: [
+      "1 oz Gin",
+      "1 1/2 oz Blue Curaço",
+      "1/2 oz Triple Sec",
+      "3/4 oz Lemon Juice",
+      "Egg White",
+    ],
+    details: "",
+    image: bluelady,
+    backgroundcolor: "#4C574E",
+    fontcolor: "#ffffff",
+    cup: "coupe",
+    IsShow: true,
+  },
+  {
+    id: "americano",
+    name: "Americano",
+    ingredients: ["1 oz Campari", "1 oz Sweet Vermouth", "Soda Fill"],
+    details: "",
+    image: americanococktail,
+    backgroundcolor: "#E11D12",
+    fontcolor: "white",
     cup: "highball",
     IsShow: true,
   },

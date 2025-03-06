@@ -103,46 +103,9 @@ public class GetIngredients implements RequestHandler<Map<String, Object>, APIGa
                 jsonObject.put("id", id_json);
                 IngredientsArr.put(jsonObject);
             }
-            //get recipes
-            ResultSet rs2 = stmt.executeQuery("SELECT * FROM recipes");
-            JSONArray recipesArr = new JSONArray();
-            while (rs.next()) {
-                int id_json = rs.getInt("id");
-                String name_json = rs.getString("name");
-                int mainLiqourId_json = rs.getInt("mainLiqourId");
-                String glass_json = rs.getString("glass");
-                String details_json = rs.getString("details");
-                boolean isActive_json = rs.getBoolean("isActive");
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("mainLiqourId", mainLiqourId_json);
-                jsonObject.put("isActive", isActive_json);
-                jsonObject.put("glass", glass_json);
-                jsonObject.put("details", details_json);
-                jsonObject.put("name", name_json);
-                jsonObject.put("id", id_json);
-                recipesArr.put(jsonObject);
-            }
-
-            //get recipe_ingredients
-            ResultSet rs3 = stmt.executeQuery("SELECT * FROM recipe_ingredients");
-            JSONArray recipe_ingredientsArr = new JSONArray();
-            while (rs.next()) {
-                int id_json = rs.getInt("id");
-                int recipe_id_json = rs.getInt("recipe_id");
-                int ingredient_id_json = rs.getInt("ingredient_id");
-                String size_json = rs.getString("size");
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("recipe_id", recipe_id_json);
-                jsonObject.put("ingredient_id", ingredient_id_json);
-                jsonObject.put("size", size_json);
-                jsonObject.put("id", id_json);
-                recipe_ingredientsArr.put(jsonObject);
-            }
 
             JSONObject jObjDevice = new JSONObject();
             jObjDevice.put("ingredients", IngredientsArr);
-            jObjDevice.put("recipes", recipesArr);
-            jObjDevice.put("recipe_ingredients", recipe_ingredientsArr);
             System.out.println(jObjDevice);
 
             return jObjDevice.toString();

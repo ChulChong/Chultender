@@ -21,7 +21,6 @@ public class GetRecipe_Ingredients implements RequestHandler<Map<String, Object>
     private static final String BUCKET_NAME = "chultender.com";
     private static final String S3_KEY = "recipes.db";
     private static final String LOCAL_DB_PATH = "/tmp/recipes.db";
-
     private final S3Client s3Client = S3Client.builder().build();
 
     @Override
