@@ -118,3 +118,11 @@
 .julep {
   margin-left: 4rem;
 }
+
+.popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: flex-end;
+  background-color: bisque;
+}
