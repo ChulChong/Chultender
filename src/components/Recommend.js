@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Chultender.css";
 import "./Recommend.css";
@@ -24,7 +24,24 @@ function Recommend() {
   const navigate = useNavigate();
   const [drinks, setDrinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTag, setActiveTag] = useState(null); // null = All
+  const [activeTags, setActiveTags] = useState([]); // empty = All
+
+  const toggleTag = (tag) => {
+    setActiveTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+    setPicked(null);
+  };
+
+  const [activeBases, setActiveBases] = useState([]); // empty = All
+
+  const toggleBase = (base) => {
+    setActiveBases((prev) =>
+      prev.includes(base) ? prev.filter((b) => b !== base) : [...prev, base]
+    );
+    setPicked(null);
+  };
+
   const [picked, setPicked] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
@@ -45,7 +62,21 @@ function Recommend() {
 
   useEffect(() => () => clearTimeout(sentTimer.current), []);
 
-  const pool = activeTag ? drinks.filter((d) => (d.tags || []).includes(activeTag)) : drinks;
+  // Every base spirit actually present in the loaded drinks, alphabetized.
+  const baseOptions = useMemo(() => {
+    const set = new Set(drinks.map((d) => d.base_spirit || "Mixed"));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [drinks]);
+
+  // Tags are AND'd (a drink must carry every selected one), but a drink
+  // only has ONE base spirit — so selecting several bases is OR'd
+  // instead ("Gin or Rum"), same as picking several base radios would.
+  const pool = drinks.filter((d) => {
+    const baseMatch =
+      activeBases.length === 0 || activeBases.includes(d.base_spirit || "Mixed");
+    const tagMatch = activeTags.every((tag) => (d.tags || []).includes(tag));
+    return baseMatch && tagMatch;
+  });
 
   const pickOne = () => {
     if (pool.length === 0) return;
@@ -100,8 +131,11 @@ function Recommend() {
         <div className="recommend-tags">
           <button
             type="button"
-            className={`recommend-tag${activeTag === null ? " active" : ""}`}
-            onClick={() => setActiveTag(null)}
+            className={`recommend-tag${activeTags.length === 0 ? " active" : ""}`}
+            onClick={() => {
+              setActiveTags([]);
+              setPicked(null);
+            }}
           >
             All
           </button>
@@ -109,19 +143,44 @@ function Recommend() {
             <button
               key={tag}
               type="button"
-              className={`recommend-tag${activeTag === tag ? " active" : ""}`}
-              onClick={() => setActiveTag(tag)}
+              className={`recommend-tag${activeTags.includes(tag) ? " active" : ""}`}
+              onClick={() => toggleTag(tag)}
             >
               {tag}
             </button>
           ))}
         </div>
 
+        {baseOptions.length > 0 && (
+          <div className="recommend-tags recommend-bases">
+            <button
+              type="button"
+              className={`recommend-tag${activeBases.length === 0 ? " active" : ""}`}
+              onClick={() => {
+                setActiveBases([]);
+                setPicked(null);
+              }}
+            >
+              All bases
+            </button>
+            {baseOptions.map((base) => (
+              <button
+                key={base}
+                type="button"
+                className={`recommend-tag${activeBases.includes(base) ? " active" : ""}`}
+                onClick={() => toggleBase(base)}
+              >
+                {base}
+              </button>
+            ))}
+          </div>
+        )}
+
         {loading ? (
           <div className="chultender-empty">Loading cocktails…</div>
         ) : pool.length === 0 ? (
           <div className="chultender-empty">
-            No drinks tagged &ldquo;{activeTag}&rdquo; yet — try All or another tag.
+            Nothing matches that combination — try fewer filters or All.
           </div>
         ) : (
           <div className="recommend-picker">
@@ -130,7 +189,8 @@ function Recommend() {
             </button>
             <div className="recommend-pool-count">
               choosing from {pool.length} drink{pool.length === 1 ? "" : "s"}
-              {activeTag ? ` tagged "${activeTag}"` : ""}
+              {activeTags.length > 0 ? ` tagged "${activeTags.join(", ")}"` : ""}
+              {activeBases.length > 0 ? ` with base ${activeBases.join(" or ")}` : ""}
             </div>
           </div>
         )}

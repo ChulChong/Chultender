@@ -31,6 +31,10 @@
   border-bottom: 1px solid var(--ct-rule-ingredient);
 }
 
+.recommend-bases {
+  padding-top: 4px;
+}
+
 .recommend-tag {
   padding: 7px 14px;
   min-height: 36px;
