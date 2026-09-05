@@ -71,6 +71,11 @@ is set explicitly by the admin in `AddCocktail.js` (a "Base" radio next
 to one ingredient line) — not inferred from ingredient text. `POST
 /api/cocktails` defaults it to `"Mixed"` if omitted.
 
+`cocktails.tags` (text[] column, e.g. `["Fresh", "Sour"]`) — same
+explicit-field pattern, admin-picked from a fixed list in
+`AddCocktail.js`, defaults to `[]` on create. Powers the tag filters
+on the frontend's `/Recommend` page.
+
 CORS is wide open (`@CrossOrigin(origins = "*")`), matching the rest of
 this project's no-auth design.
 
