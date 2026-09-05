@@ -1,8 +1,9 @@
 # chultender-backend (Spring Boot, exploratory)
 
-An alternative REST API for the `cocktails` table, built to answer "could
-this run on Spring Boot instead of calling Supabase directly from the
-browser?" It connects straight to the **same Supabase Postgres database**
+An alternative REST API for the `cocktails` and `ingredient_keywords`
+tables, built to answer "could this run on Spring Boot instead of calling
+Supabase directly from the browser?" It connects straight to the **same
+Supabase Postgres database**
 the React app already uses (see `../src/lib/supabaseClient.js`) — same
 data, same rows, no migration needed. It is **not wired into the React
 app** — `Chultender.js` still talks to Supabase directly. This is a
@@ -36,6 +37,12 @@ parallel API to poke at.
 | POST   | `/api/cocktails`        | Body matches the DB columns (camelCase — see `Cocktail.java`). `id` auto-slugified from `name` if omitted. 409 on duplicate id. |
 | PUT    | `/api/cocktails/{id}`   | Full replace.                                     |
 | DELETE | `/api/cocktails/{id}`   | Actually deletes — connecting as the `postgres` role bypasses Supabase's Row Level Security entirely, unlike the anon-key client the React app uses (which has no DELETE policy on this table today). |
+
+| Method | Path                              | Notes                                             |
+| ------ | --------------------------------- | -------------------------------------------------- |
+| GET    | `/api/ingredient-keywords`        | All keywords, ordered by name.                     |
+| POST   | `/api/ingredient-keywords`        | Body: `{"name": "..."}` (`id` optional, auto-slugified from `name`). Duplicate id returns the existing row instead of erroring — matches the app's current "ignore 23505" behavior for this table. |
+| DELETE | `/api/ingredient-keywords/{id}`   | Actually deletes — same DELETE-bypasses-RLS story as `cocktails` above; the anon-key client has no DELETE policy on this table either. 404 if missing. |
 
 CORS is wide open (`@CrossOrigin(origins = "*")`), matching the rest of
 this project's no-auth design.
