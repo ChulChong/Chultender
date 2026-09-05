@@ -17,7 +17,37 @@ const BLANK_FORM = {
   ingredientLines: [],
   backgroundColor: "#819651",
   fontColor: "#ffffff",
+  baseSpirit: "",
 };
+
+const UNIT_OPTIONS = ["oz", "ml", "fill"];
+const ML_PER_OZ = 29.5735;
+
+// Formats an oz amount the way the rest of the ingredient list already
+// reads (a plain number, not a fraction) — "1.5", "2", "0.75" — trimming
+// floating-point noise from the ml->oz conversion.
+function formatOz(oz) {
+  const rounded = Math.round(oz * 100) / 100;
+  return String(rounded);
+}
+
+// Builds one ingredient line from the structured composer (name + amount
+// + unit) below the ingredient list. "fill" ingredients (soda, tonic,
+// coke, ...) have no measured amount — just "<Name> Fill", matching the
+// existing data's convention (e.g. "Soda Fill"). "ml" is converted to oz
+// before being stored, so every measured line ends up in the same unit
+// regardless of how the admin entered it.
+function composeIngredientLine(name, amount, unit) {
+  const trimmedName = name.trim();
+  if (!trimmedName) return null;
+  if (unit === "fill") {
+    return `${trimmedName} Fill`;
+  }
+  const amountNum = parseFloat(amount);
+  if (!amountNum || amountNum <= 0) return null;
+  const oz = unit === "ml" ? amountNum / ML_PER_OZ : amountNum;
+  return `${formatOz(oz)} oz ${trimmedName}`;
+}
 
 function slugify(name) {
   return name
@@ -25,6 +55,21 @@ function slugify(name) {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+// Strips a leading amount ("2", "1 1/2", "3/4 oz", "1 dash", ...) off an
+// ingredient line to suggest a clean base-spirit label when the admin
+// marks that line as the base — e.g. "2 oz Bourbon" -> "Bourbon". Just a
+// starting point: the Base spirit field stays a plain text input, so a
+// suggestion that comes out oddly (or none, if the line has no leading
+// amount) can be edited or typed by hand either way.
+function suggestBaseLabel(line) {
+  const trimmed = (line || "").trim();
+  const match = trimmed.match(
+    /^[\d./\s]+\s*(oz|ml|cl|tsp|tbsp|dash(?:es)?|drop(?:s)?|splash(?:es)?|gram(?:s)?|cup(?:s)?|part(?:s)?|pinch(?:es)?|whole)?\.?\s*/i
+  );
+  const rest = match ? trimmed.slice(match[0].length).trim() : trimmed;
+  return rest || trimmed;
 }
 
 // Cocktail Admin — add new cocktails or edit any existing one. Existing
@@ -46,6 +91,18 @@ const AddCocktail = () => {
   const [editingId, setEditingId] = useState(null); // null = adding a new cocktail
 
   const [form, setForm] = useState(BLANK_FORM);
+  // Which ingredient line's "Base" radio is checked — purely for
+  // highlighting the right radio; the actual value lives in
+  // form.baseSpirit (a plain text field the admin can still edit by
+  // hand after picking a line, or instead of picking one at all).
+  const [baseLineIndex, setBaseLineIndex] = useState(null);
+
+  // The structured "name / amount / unit" composer that builds a single
+  // ingredient line (see composeIngredientLine above) instead of typing
+  // the whole thing freehand.
+  const [composerName, setComposerName] = useState("");
+  const [composerAmount, setComposerAmount] = useState("");
+  const [composerUnit, setComposerUnit] = useState("oz");
   const [existingImageUrl, setExistingImageUrl] = useState(null);
 
   const [keywords, setKeywords] = useState([]);
@@ -101,6 +158,10 @@ const AddCocktail = () => {
   const resetForm = () => {
     setEditingId(null);
     setForm(BLANK_FORM);
+    setBaseLineIndex(null);
+    setComposerName("");
+    setComposerAmount("");
+    setComposerUnit("oz");
     setExistingImageUrl(null);
     setImageFile(null);
     setPreviewUrl(null);
@@ -119,7 +180,12 @@ const AddCocktail = () => {
       ingredientLines: [...(cocktail.ingredients || [])],
       backgroundColor: cocktail.background_color || "#819651",
       fontColor: cocktail.font_color || "#ffffff",
+      baseSpirit: cocktail.base_spirit || "",
     });
+    setBaseLineIndex(null);
+    setComposerName("");
+    setComposerAmount("");
+    setComposerUnit("oz");
     setExistingImageUrl(cocktail.image_url || null);
     setImageFile(null);
     setPreviewUrl(null);
@@ -134,7 +200,10 @@ const AddCocktail = () => {
     setForm((prev) => {
       const lines = [...prev.ingredientLines];
       lines[index] = value;
-      return { ...prev, ingredientLines: lines };
+      // Keep the suggested base-spirit label in sync while the admin is
+      // still typing the line they marked as the base.
+      const baseSpirit = index === baseLineIndex ? suggestBaseLabel(value) : prev.baseSpirit;
+      return { ...prev, ingredientLines: lines, baseSpirit };
     });
   };
 
@@ -143,10 +212,29 @@ const AddCocktail = () => {
       ...prev,
       ingredientLines: prev.ingredientLines.filter((_, i) => i !== index),
     }));
+    setBaseLineIndex((prev) => {
+      if (prev === null) return prev;
+      if (prev === index) return null;
+      return prev > index ? prev - 1 : prev;
+    });
+  };
+
+  const markBaseLine = (index) => {
+    setBaseLineIndex(index);
+    updateField("baseSpirit", suggestBaseLabel(form.ingredientLines[index]));
   };
 
   const addLine = (text = "") => {
     setForm((prev) => ({ ...prev, ingredientLines: [...prev.ingredientLines, text] }));
+  };
+
+  const handleAddComposedLine = () => {
+    const line = composeIngredientLine(composerName, composerAmount, composerUnit);
+    if (!line) return;
+    addLine(line);
+    setComposerName("");
+    setComposerAmount("");
+    setComposerUnit("oz");
   };
 
   const handleAddKeyword = async () => {
@@ -245,6 +333,7 @@ const AddCocktail = () => {
         background_color: form.backgroundColor,
         font_color: form.fontColor,
         is_show: form.isShow,
+        base_spirit: form.baseSpirit.trim() || "Mixed",
       };
 
       if (editingId) {
@@ -382,6 +471,15 @@ const AddCocktail = () => {
             <div className="ingredient-lines">
               {form.ingredientLines.map((line, i) => (
                 <div className="ingredient-line" key={i}>
+                  <label className="ingredient-line-base" title="Mark as the base spirit">
+                    <input
+                      type="radio"
+                      name="base-line"
+                      checked={baseLineIndex === i}
+                      onChange={() => markBaseLine(i)}
+                    />
+                    <span>Base</span>
+                  </label>
                   <Form.Control
                     size="sm"
                     value={line}
@@ -398,10 +496,59 @@ const AddCocktail = () => {
                   </button>
                 </div>
               ))}
-              <Button variant="outline-secondary" size="sm" onClick={() => addLine("")}>
-                + Add ingredient line
+            </div>
+
+            <div className="ingredient-composer">
+              <Form.Control
+                size="sm"
+                placeholder="Ingredient name"
+                value={composerName}
+                onChange={(e) => setComposerName(e.target.value)}
+                className="ingredient-composer-name"
+              />
+              {composerUnit !== "fill" && (
+                <Form.Control
+                  size="sm"
+                  type="number"
+                  min="0"
+                  step="any"
+                  placeholder="Amount"
+                  value={composerAmount}
+                  onChange={(e) => setComposerAmount(e.target.value)}
+                  className="ingredient-composer-amount"
+                />
+              )}
+              <Form.Select
+                size="sm"
+                value={composerUnit}
+                onChange={(e) => setComposerUnit(e.target.value)}
+                className="ingredient-composer-unit"
+              >
+                {UNIT_OPTIONS.map((unit) => (
+                  <option key={unit} value={unit}>
+                    {unit}
+                  </option>
+                ))}
+              </Form.Select>
+              <Button variant="outline-secondary" size="sm" onClick={handleAddComposedLine}>
+                + Add
               </Button>
             </div>
+            {composerUnit === "ml" && composerAmount && (
+              <p className="ingredient-composer-hint">
+                {composerAmount} ml → {formatOz(parseFloat(composerAmount) / ML_PER_OZ || 0)} oz
+              </p>
+            )}
+
+            <Form.Group className="mb-3 base-spirit-field">
+              <Form.Label>Base spirit</Form.Label>
+              <Form.Control
+                size="sm"
+                value={form.baseSpirit}
+                placeholder="e.g. Bourbon — pick the base radio above, or type your own"
+                onChange={(e) => updateField("baseSpirit", e.target.value)}
+              />
+            </Form.Group>
 
             <Form.Control
               size="sm"
@@ -416,8 +563,8 @@ const AddCocktail = () => {
                   key={keyword.id}
                   type="button"
                   className="ingredient-chip-toggle"
-                  onClick={() => addLine(keyword.name)}
-                  title="Insert as a new ingredient line"
+                  onClick={() => setComposerName(keyword.name)}
+                  title="Fill in the ingredient composer below"
                 >
                   + {keyword.name}
                 </button>

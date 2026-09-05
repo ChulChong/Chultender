@@ -4,37 +4,6 @@ import "./Chultender.css";
 import { backend } from "../lib/backendClient";
 import emailjs from "@emailjs/browser";
 
-// Base spirit shown next to each drink's name, derived from its
-// ingredient list — first match wins. See design_handoff README for the
-// exact list this mirrors.
-const BASES = [
-  "Bourbon",
-  "Rye Whiskey",
-  "Jack Daniel's",
-  "Scotch",
-  "Gin",
-  "Vodka",
-  "Rum",
-  "Midori",
-  "Campari",
-  "Aperol",
-  "St. Germain",
-  "Peach Tree",
-  "Amaretto",
-  "Kahlua",
-  "Prosecco",
-  "Tequila",
-];
-
-function deriveBase(ingredients) {
-  const hit = BASES.find((base) =>
-    ingredients.some((ingredient) =>
-      ingredient.toLowerCase().includes(base.toLowerCase())
-    )
-  );
-  return hit === "Jack Daniel's" ? "Whiskey" : hit || "Mixed";
-}
-
 function Chultender() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -66,9 +35,12 @@ function Chultender() {
   useEffect(() => () => clearTimeout(sentTimer.current), []);
 
   const drinks = useMemo(() => {
+    // base_spirit is set explicitly per cocktail in Cocktail Admin (the
+    // "Base" radio next to an ingredient line) — no more guessing it
+    // from ingredient text on every render.
     const withBase = recipes.map((recipe) => ({
       ...recipe,
-      base: deriveBase(recipe.ingredients),
+      base: recipe.base_spirit || "Mixed",
     }));
     // Group by main liquor (base spirit) first, alphabetically, then by
     // drink name within each group.

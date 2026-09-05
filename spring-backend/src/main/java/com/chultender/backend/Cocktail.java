@@ -51,6 +51,12 @@ public class Cocktail {
     @Column(name = "is_show")
     private Boolean isShow;
 
+    // The ingredient the admin marked as "Base" when adding/editing the
+    // cocktail (see AddCocktail.js) — a clean, explicit label instead of
+    // guessing it from ingredient text on every read.
+    @Column(name = "base_spirit")
+    private String baseSpirit;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
@@ -144,5 +150,15 @@ public class Cocktail {
     @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("base_spirit")
+    public String getBaseSpirit() {
+        return baseSpirit;
+    }
+
+    @JsonProperty("base_spirit")
+    public void setBaseSpirit(String baseSpirit) {
+        this.baseSpirit = baseSpirit;
     }
 }

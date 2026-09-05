@@ -53,6 +53,9 @@ public class CocktailController {
         if (cocktail.getFontColor() == null) cocktail.setFontColor("#ffffff");
         if (cocktail.getIsShow() == null) cocktail.setIsShow(true);
         if (cocktail.getIngredients() == null) cocktail.setIngredients(new String[0]);
+        if (cocktail.getBaseSpirit() == null || cocktail.getBaseSpirit().isBlank()) {
+            cocktail.setBaseSpirit("Mixed");
+        }
 
         if (repository.existsById(cocktail.getId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
