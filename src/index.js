@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Chultender from "./components/Chultender";
 import AddCocktail from "./components/AddCocktail";
+import Recommend from "./components/Recommend";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
@@ -10,6 +11,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Chultender />}></Route>
         <Route path="/Chultender" element={<Chultender />}></Route>
+        <Route path="/Recommend" element={<Recommend />}></Route>
         {/* /Admin used to show an old ingredients table backed by a
             defunct AWS Lambda endpoint, with a link through to the
             cocktail admin page — that table never touched Supabase, so

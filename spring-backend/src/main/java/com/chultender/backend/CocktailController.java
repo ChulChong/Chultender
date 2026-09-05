@@ -56,6 +56,7 @@ public class CocktailController {
         if (cocktail.getBaseSpirit() == null || cocktail.getBaseSpirit().isBlank()) {
             cocktail.setBaseSpirit("Mixed");
         }
+        if (cocktail.getTags() == null) cocktail.setTags(new String[0]);
 
         if (repository.existsById(cocktail.getId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)

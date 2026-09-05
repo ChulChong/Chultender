@@ -93,7 +93,6 @@
 
 .chultender-search-wrap {
   padding: 12px 16px;
-  border-bottom: 2px solid var(--ct-ink);
 }
 
 .chultender-search {
@@ -108,6 +107,26 @@
   font-size: 15px;
   color: var(--ct-ink);
   outline: none;
+}
+
+.chultender-recommend-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 16px 12px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--ct-accent);
+  cursor: pointer;
+  border-bottom: 2px solid var(--ct-ink);
+}
+
+.chultender-recommend-link:hover {
+  color: var(--ct-accent-600);
 }
 
 .chultender-search::placeholder,

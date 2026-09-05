@@ -141,6 +141,9 @@ function Chultender() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
+          <button className="chultender-recommend-link" onClick={() => navigate("/Recommend")}>
+            Not sure what to drink? Get a recommendation →
+          </button>
         </div>
 
         {loading ? (

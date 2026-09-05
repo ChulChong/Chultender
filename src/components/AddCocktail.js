@@ -9,6 +9,22 @@ import "./AddCocktail.css";
 
 const CUP_OPTIONS = ["ontherock", "highball", "flute", "coupe", "martini", "julep"];
 
+// Shown as filter chips on /Recommend. A fixed, curated list (not
+// derived from ingredients) — same reasoning as base_spirit: the admin
+// picks what actually fits the drink instead of a heuristic guessing.
+const TAG_OPTIONS = [
+  "Fresh",
+  "Strong",
+  "Sweet",
+  "Sour",
+  "Bitter",
+  "Fruity",
+  "Classic",
+  "Light",
+  "Creamy",
+  "Bubbly",
+];
+
 const BLANK_FORM = {
   name: "",
   details: "",
@@ -18,6 +34,7 @@ const BLANK_FORM = {
   backgroundColor: "#819651",
   fontColor: "#ffffff",
   baseSpirit: "",
+  tags: [],
 };
 
 const UNIT_OPTIONS = ["oz", "ml", "fill"];
@@ -181,6 +198,7 @@ const AddCocktail = () => {
       backgroundColor: cocktail.background_color || "#819651",
       fontColor: cocktail.font_color || "#ffffff",
       baseSpirit: cocktail.base_spirit || "",
+      tags: [...(cocktail.tags || [])],
     });
     setBaseLineIndex(null);
     setComposerName("");
@@ -195,6 +213,13 @@ const AddCocktail = () => {
   };
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+
+  const toggleTag = (tag) => {
+    setForm((prev) => ({
+      ...prev,
+      tags: prev.tags.includes(tag) ? prev.tags.filter((t) => t !== tag) : [...prev.tags, tag],
+    }));
+  };
 
   const updateLine = (index, value) => {
     setForm((prev) => {
@@ -334,6 +359,7 @@ const AddCocktail = () => {
         font_color: form.fontColor,
         is_show: form.isShow,
         base_spirit: form.baseSpirit.trim() || "Mixed",
+        tags: form.tags,
       };
 
       if (editingId) {
@@ -548,6 +574,22 @@ const AddCocktail = () => {
                 placeholder="e.g. Bourbon — pick the base radio above, or type your own"
                 onChange={(e) => updateField("baseSpirit", e.target.value)}
               />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Tags (shown as filters on /Recommend)</Form.Label>
+              <div className="tag-options">
+                {TAG_OPTIONS.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    className={`tag-toggle${form.tags.includes(tag) ? " selected" : ""}`}
+                    onClick={() => toggleTag(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
             </Form.Group>
 
             <Form.Control

@@ -57,6 +57,13 @@ public class Cocktail {
     @Column(name = "base_spirit")
     private String baseSpirit;
 
+    // Admin-picked mood/style tags (Fresh, Strong, Sweet, ...) shown as
+    // filters on the /Recommend page — same explicit-field pattern as
+    // base_spirit, not inferred from ingredients.
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]")
+    private String[] tags;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
@@ -160,5 +167,13 @@ public class Cocktail {
     @JsonProperty("base_spirit")
     public void setBaseSpirit(String baseSpirit) {
         this.baseSpirit = baseSpirit;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
     }
 }

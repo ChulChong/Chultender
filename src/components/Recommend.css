@@ -1,0 +1,105 @@
+/* Recommend — reuses Chultender.css's tokens and several of its classes
+   (imported alongside this file in Recommend.js) so the two pages read
+   as one product; only the tag filter, pick button, and result card
+   header are new here. */
+
+.recommend-back {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ct-muted);
+  cursor: pointer;
+  border-bottom: 2px solid var(--ct-ink);
+}
+
+.recommend-back:hover {
+  color: var(--ct-ink);
+}
+
+.recommend-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid var(--ct-rule-ingredient);
+}
+
+.recommend-tag {
+  padding: 7px 14px;
+  min-height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--ct-rule-row);
+  background: var(--ct-bg);
+  color: var(--ct-ink);
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.recommend-tag.active {
+  background: var(--ct-ink);
+  border-color: var(--ct-ink);
+  color: var(--ct-bg);
+}
+
+.recommend-picker {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--ct-rule-ingredient);
+}
+
+.recommend-pick-btn {
+  width: 100%;
+  min-height: 52px;
+  background: var(--ct-accent);
+  color: var(--ct-bg);
+  border: 0;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.recommend-pick-btn:hover {
+  background: var(--ct-accent-600);
+}
+
+.recommend-pick-btn:active {
+  background: var(--ct-accent-700);
+}
+
+.recommend-pool-count {
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ct-meta);
+}
+
+.recommend-result-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 16px 6px;
+}
+
+.recommend-result-name {
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ct-ink);
+}
