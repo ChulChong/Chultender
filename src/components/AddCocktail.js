@@ -44,6 +44,7 @@ const AddCocktail = () => {
   const [existingImageUrl, setExistingImageUrl] = useState(null);
 
   const [keywords, setKeywords] = useState([]);
+  const [keywordSearch, setKeywordSearch] = useState("");
   const [newKeywordName, setNewKeywordName] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
 
@@ -82,6 +83,12 @@ const AddCocktail = () => {
     if (!q) return cocktails;
     return cocktails.filter((c) => c.name.toLowerCase().includes(q));
   }, [cocktails, listSearch]);
+
+  const filteredKeywords = useMemo(() => {
+    const q = keywordSearch.trim().toLowerCase();
+    if (!q) return keywords;
+    return keywords.filter((k) => k.name.toLowerCase().includes(q));
+  }, [keywords, keywordSearch]);
 
   const resetForm = () => {
     setEditingId(null);
@@ -348,8 +355,15 @@ const AddCocktail = () => {
               </Button>
             </div>
 
+            <Form.Control
+              size="sm"
+              placeholder="Search ingredients…"
+              value={keywordSearch}
+              onChange={(e) => setKeywordSearch(e.target.value)}
+              className="ingredient-chip-search"
+            />
             <div className="ingredient-chips">
-              {keywords.map((keyword) => (
+              {filteredKeywords.map((keyword) => (
                 <button
                   key={keyword.id}
                   type="button"
@@ -360,6 +374,9 @@ const AddCocktail = () => {
                   + {keyword.name}
                 </button>
               ))}
+              {filteredKeywords.length === 0 && (
+                <span className="ingredient-chips-empty">No matching ingredients.</span>
+              )}
             </div>
 
             <div className="ingredient-add-new">
