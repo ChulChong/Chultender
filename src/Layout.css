@@ -7,15 +7,15 @@ p {
 }
 .main {
   background-color: #ff7e7e;
-  height: 100vh;
+  min-height: 100vh;
 }
-.img {
-  width: 100%;
-  position: absolute;
-  top: 23rem;
+.image {
+  display: flex;
+  flex-direction: column;
 }
+.img,
 .img2 {
+  display: block;
   width: 100%;
-  position: absolute;
-  top: 53rem;
+  cursor: pointer;
 }
