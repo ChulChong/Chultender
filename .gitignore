@@ -15,6 +15,15 @@
 # production
 /build
 
+# local Claude Code session state
+/.claude
+/.agents
+
+# working files for the cocktail image regeneration scripts — the actual
+# images live in Supabase Storage, not the repo (~120MB across both)
+/scripts/new-images
+/scripts/normalized-images
+
 # misc
 .DS_Store
 .env.local

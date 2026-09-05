@@ -1,0 +1,103 @@
+.add-cocktail {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.add-cocktail-back {
+  padding-left: 0;
+}
+
+.add-cocktail-form {
+  margin-top: 20px;
+}
+
+.ingredient-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ingredient-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ingredient-chip-toggle {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.ingredient-chip-toggle.selected {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+}
+
+.ingredient-chip-amount {
+  width: 130px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+.ingredient-add-new {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ingredient-add-new .form-control {
+  max-width: 260px;
+}
+
+.add-cocktail-preview {
+  margin-top: 12px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.add-cocktail-preview img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.add-cocktail-swatches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-cocktail-swatches label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.add-cocktail-swatch-preview {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.add-cocktail-error {
+  color: #c0392b;
+}
+
+.add-cocktail-success {
+  color: #2e7d32;
+}

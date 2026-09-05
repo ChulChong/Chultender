@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import getAPIKeys from "./APIkeys/APIkeys";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
@@ -99,6 +100,7 @@ const Admin = () => {
 
   return (
     <div className="admin">
+      <Link to="/AddCocktail">+ Add Cocktail</Link>
       <Accordion>
         <Accordion.Item eventKey="0">
           <Accordion.Header>Ingredients</Accordion.Header>

@@ -1,128 +1,437 @@
-.accordion {
-  color: rgb(51, 51, 51);
-  cursor: pointer;
-  font-size: 4rem;
-  padding: 2vh;
+/* Chultender — "Modernist" design (see design_handoff_chultender_modern/
+   README.md for the full spec this implements). Ink on a light ground,
+   Archivo throughout, zero radius, one red accent used only for emphasis
+   and the primary action. */
+
+.chultender-page {
+  --ct-bg: #f3f2f2;
+  --ct-page-bg: #e4e2e2;
+  --ct-surface: #eae9e9;
+  --ct-ink: #201e1d;
+  --ct-accent: #ec3013;
+  --ct-accent-600: #dd2b0f;
+  --ct-accent-700: #ae1800;
+  --ct-muted: #605d5d;
+  --ct-meta: #7d7979;
+  --ct-placeholder: #9b9797;
+  --ct-rule-row: rgba(32, 30, 29, 0.4);
+  --ct-rule-ingredient: rgba(32, 30, 29, 0.18);
+
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--ct-page-bg);
+  font-family: "Archivo", system-ui, sans-serif;
+}
+
+.chultender-column {
   width: 100%;
-  text-align: center;
-  border: none;
-  outline: none;
-  transition: 0.9s;
-  font-family: league spartan;
-  font-weight: 600;
-  border-radius: 50px 50px 0 0;
+  max-width: 430px;
+  background: var(--ct-bg);
+  box-shadow: 0 3px 10px rgba(45, 43, 43, 0.16);
 }
 
-.outer {
-  margin-top: -1px;
+.chultender-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--ct-bg);
 }
 
-.neonsign {
-  width: 100%;
+.chultender-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 22px 16px 14px;
+  border-bottom: 2px solid var(--ct-ink);
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active,
-.accordion:hover {
-  background-color: relative;
-  border: none;
-  outline: none;
+.chultender-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* Style the accordion panel. Note: hidden by default */
-.panel {
-  font-family: "News Cycle";
-  padding: 0 4rem;
-  max-height: 0;
-  overflow: hidden;
-  height: 100%;
-  margin-top: -3px;
-  border: none;
-  outline: none;
-  transition: max-height 0.2s ease-out;
-  position: relative;
-}
-
-.ingredients {
-  margin-top: 30px;
-  margin-left: 10px;
-  text-align: left;
-  font-size: 3rem;
-  font-weight: bold;
-}
-
-.details {
-  font-size: 2.5rem;
-  text-align: left;
-  padding: 5rem;
-}
-
-.picture {
-  margin-left: 2rem;
-}
-
-.picture-wrapper {
+.chultender-brand-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--ct-accent);
   display: block;
-  text-align: center;
 }
 
-/*individual picture adjustment*/
-
-.ontherock {
-  height: 30rem;
-  margin-left: 0rem;
+.chultender-brand-name {
+  font-weight: 800;
+  font-size: 21px;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--ct-ink);
 }
 
-.highball {
-  height: 40rem;
-  margin: 0rem;
+.chultender-tagline {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ct-muted);
+  margin-top: 8px;
 }
 
-.flute {
-  margin-left: -2rem;
-  height: 35rem;
+.chultender-count {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.4;
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--ct-meta);
+  padding-bottom: 2px;
+  white-space: nowrap;
 }
 
-.highball#mojito {
-  margin-left: 2rem;
+.chultender-search-wrap {
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--ct-ink);
 }
 
-.highball#midorisour {
-  margin-left: 0rem;
+.chultender-search {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid var(--ct-ink);
+  padding: 6px 0;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ct-ink);
+  outline: none;
 }
 
-.coupe {
-  margin-left: 0;
+.chultender-search::placeholder,
+.chultender-modal-input::placeholder {
+  color: var(--ct-placeholder);
 }
 
-.coupe#amarettosour {
-  margin-left: 2rem;
-}
-.coupe#EspressoMartini {
-  margin-left: 2rem;
-  width: 500px;
-}
-
-.martini {
-  margin-left: 4rem;
+.chultender-search:focus-visible,
+.chultender-modal-input:focus-visible,
+.chultender-row-header:focus-visible,
+.chultender-order-btn:focus-visible,
+.chultender-modal-submit:focus-visible,
+.chultender-modal-cancel:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
 }
 
-.martini#whiskeysour {
-  margin-left: 0rem;
+.chultender-row {
+  border-bottom: 1px solid var(--ct-rule-row);
 }
 
-.martini#JapaneseSlipper {
-  margin-left: 0rem;
+.chultender-row-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px 16px;
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: "Archivo", system-ui, sans-serif;
 }
 
-.julep {
-  margin-left: 4rem;
+.chultender-row-header:hover {
+  background: rgba(236, 48, 19, 0.06);
 }
 
-.popup {
+.chultender-row-num {
+  font-family: ui-monospace, Menlo, monospace;
+  font-weight: 500;
+  font-size: 10px;
+  color: var(--ct-meta);
+  width: 16px;
+  flex: none;
+}
+
+.chultender-row-name {
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ct-ink);
+  flex: 1;
+}
+
+.chultender-row-base {
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ct-accent);
+  white-space: nowrap;
+}
+
+.chultender-row-sign {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--ct-ink);
+  width: 12px;
+  text-align: right;
+}
+
+/* Grid-rows trick: animates open/close to the content's natural height
+   without measuring scrollHeight in JS. */
+.chultender-panel-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease-out;
+}
+
+.chultender-panel-wrap.open {
+  grid-template-rows: 1fr;
+}
+
+.chultender-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.chultender-panel-grid {
+  padding: 2px 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr 128px;
+  gap: 16px;
+  align-items: start;
+}
+
+.chultender-build-label {
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ct-meta);
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--ct-ink);
+}
+
+.chultender-ingredient {
+  font-weight: 400;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--ct-ink);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--ct-rule-ingredient);
+  font-variant-numeric: tabular-nums;
+}
+
+.chultender-photo-cell {
+  background: var(--ct-surface);
+  height: 170px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.chultender-photo {
+  max-height: 162px;
+  width: auto;
+}
+
+.chultender-photo-placeholder {
+  background: var(--ct-surface);
+  height: 170px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-content: flex-end;
-  background-color: bisque;
+  justify-content: flex-end;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid rgba(32, 30, 29, 0.25);
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(32, 30, 29, 0.07) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+.chultender-photo-placeholder span {
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ct-muted);
+}
+
+.chultender-details {
+  padding: 0 16px 18px;
+  font-weight: 400;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ct-muted);
+  text-wrap: pretty;
+}
+
+.chultender-order-wrap {
+  padding: 0 16px 20px;
+}
+
+.chultender-order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  background: var(--ct-accent);
+  color: var(--ct-bg);
+  border: 0;
+  padding: 14px 16px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.chultender-order-btn:hover {
+  background: var(--ct-accent-600);
+}
+
+.chultender-order-btn:active {
+  background: var(--ct-accent-700);
+}
+
+.chultender-empty {
+  padding: 28px 16px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ct-muted);
+}
+
+.chultender-footer {
+  padding: 20px 16px 28px;
+  border-top: 2px solid var(--ct-ink);
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ct-meta);
+}
+
+.chultender-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 30, 29, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 20px;
+}
+
+.chultender-modal {
+  width: 100%;
+  max-width: 360px;
+  background: var(--ct-bg);
+  box-shadow: 0 12px 32px rgba(45, 43, 43, 0.22);
+}
+
+.chultender-modal-kicker {
+  padding: 20px 20px 0;
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ct-accent);
+}
+
+.chultender-modal-title {
+  padding: 6px 20px 0;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ct-ink);
+}
+
+.chultender-modal-sub {
+  padding: 8px 20px 0;
+  font-weight: 400;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ct-muted);
+}
+
+.chultender-modal-body {
+  padding: 16px 20px 20px;
+}
+
+.chultender-modal-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid var(--ct-ink);
+  padding: 8px 0;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ct-ink);
+  outline: none;
+  margin-bottom: 18px;
+}
+
+.chultender-modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.chultender-modal-submit {
+  flex: 1;
+  min-height: 44px;
+  background: var(--ct-accent);
+  color: var(--ct-bg);
+  border: 0;
+  padding: 13px 16px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chultender-modal-submit:hover {
+  background: var(--ct-accent-600);
+}
+
+.chultender-modal-cancel {
+  min-height: 44px;
+  background: transparent;
+  color: var(--ct-ink);
+  border: 1px solid var(--ct-rule-row);
+  padding: 13px 16px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chultender-modal-cancel:hover {
+  background: rgba(32, 30, 29, 0.07);
+}
+
+.chultender-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: var(--ct-ink);
+  color: var(--ct-bg);
+  padding: 12px 16px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  z-index: 70;
 }
