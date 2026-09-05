@@ -4,11 +4,6 @@ import "./Chultender.css";
 import { backend } from "../lib/backendClient";
 import emailjs from "@emailjs/browser";
 
-// Not real security — just a quick, low-friction way in for the one
-// person who needs it, instead of typing /Admin. Matches the rest of
-// the app's no-auth design (see AddCocktail.js).
-const ADMIN_PASSWORD = "987987";
-
 // Base spirit shown next to each drink's name, derived from its
 // ingredient list — first match wins. See design_handoff README for the
 // exact list this mirrors.
@@ -118,10 +113,13 @@ function Chultender() {
 
   const closeModal = () => setShowModal(false);
 
-  const handleSecretEntry = () => {
+  const handleSecretEntry = async () => {
     const input = window.prompt("Password:");
     if (input === null) return; // cancelled
-    if (input === ADMIN_PASSWORD) {
+    // Checked server-side (see spring-backend's AdminController) so the
+    // real password never has to live in this public JS bundle.
+    const { data, error } = await backend.admin.verify(input);
+    if (!error && data?.ok) {
       navigate("/Admin");
     } else {
       window.alert("Wrong password.");

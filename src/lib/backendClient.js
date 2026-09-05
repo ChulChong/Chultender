@@ -63,4 +63,13 @@ export const backend = {
         body: JSON.stringify({ name }),
       }),
   },
+  admin: {
+    // The actual password lives only in the backend's gitignored
+    // application-local.properties — never in this bundle.
+    verify: (password) =>
+      request(`/admin/verify`, {
+        method: "POST",
+        body: JSON.stringify({ password }),
+      }),
+  },
 };

@@ -28,6 +28,9 @@
 /spring-backend/target
 /spring-backend/src/main/resources/application-local.properties
 
+# editor
+/.vscode
+
 # misc
 .DS_Store
 .env.local
