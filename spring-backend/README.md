@@ -62,6 +62,15 @@ Method → **Session pooler**.
 | POST   | `/api/ingredient-keywords`        | Body: `{"name": "..."}` (`id` optional, auto-slugified from `name`). Duplicate id returns the existing row instead of erroring — matches the app's current "ignore 23505" behavior for this table. |
 | DELETE | `/api/ingredient-keywords/{id}`   | Actually deletes — same DELETE-bypasses-RLS story as `cocktails` above; the anon-key client has no DELETE policy on this table either. 404 if missing. |
 
+| Method | Path                | Notes                                             |
+| ------ | ------------------- | -------------------------------------------------- |
+| POST   | `/api/admin/verify` | Body: `{"password": "..."}` → `{"ok": true}` or `{"ok": false}`. Backs the hidden `/Admin` entry point in `Chultender.js` (click the brand-dot, enter the password) — checked against `admin.password` in `application-local.properties` so the value never ships in the public JS bundle. Not real auth: no session, no rate limiting, no hashing. |
+
+`cocktails.base_spirit` (text column, e.g. "Bourbon", "Gin", "Mixed")
+is set explicitly by the admin in `AddCocktail.js` (a "Base" radio next
+to one ingredient line) — not inferred from ingredient text. `POST
+/api/cocktails` defaults it to `"Mixed"` if omitted.
+
 CORS is wide open (`@CrossOrigin(origins = "*")`), matching the rest of
 this project's no-auth design.
 
