@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Chultender.css";
 import { backend } from "../lib/backendClient";
 import emailjs from "@emailjs/browser";
+
+// Not real security — just a quick, low-friction way in for the one
+// person who needs it, instead of typing /Admin. Matches the rest of
+// the app's no-auth design (see AddCocktail.js).
+const ADMIN_PASSWORD = "987987";
 
 // Base spirit shown next to each drink's name, derived from its
 // ingredient list — first match wins. See design_handoff README for the
@@ -35,6 +41,7 @@ function deriveBase(ingredients) {
 }
 
 function Chultender() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -111,6 +118,16 @@ function Chultender() {
 
   const closeModal = () => setShowModal(false);
 
+  const handleSecretEntry = () => {
+    const input = window.prompt("Password:");
+    if (input === null) return; // cancelled
+    if (input === ADMIN_PASSWORD) {
+      navigate("/Admin");
+    } else {
+      window.alert("Wrong password.");
+    }
+  };
+
   const sendEmail = (data) => {
     emailjs
       .send("service_y4u4u9z", "template_kepzcvg", data, "uucLbm7oCkBcst-pE")
@@ -137,7 +154,12 @@ function Chultender() {
           <div className="chultender-header">
             <div>
               <div className="chultender-brand">
-                <span className="chultender-brand-dot" />
+                <button
+                  type="button"
+                  className="chultender-brand-dot"
+                  onClick={handleSecretEntry}
+                  aria-label="Admin"
+                />
                 <span className="chultender-brand-name">CHULTENDER</span>
               </div>
               <div className="chultender-tagline">
