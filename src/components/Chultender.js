@@ -54,14 +54,6 @@ function Chultender() {
     }));
   }, [recipes]);
 
-  // Same as the previous build: the last row (in the current sort order)
-  // starts open. Runs once the sorted list is ready.
-  useEffect(() => {
-    if (open === null && drinks.length > 0) {
-      setOpen(drinks[drinks.length - 1].id);
-    }
-  }, [drinks, open]);
-
   const query = search.trim().toLowerCase();
   const filteredDrinks = query
     ? drinks.filter(
