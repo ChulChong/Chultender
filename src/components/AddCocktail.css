@@ -71,6 +71,11 @@
   margin-bottom: 2px;
 }
 
+.admin-hidden-only {
+  font-size: 13px;
+  color: #6c757d;
+}
+
 .admin-new-btn {
   width: 100%;
 }
@@ -301,6 +306,16 @@
 
   .admin-list-body.collapsed {
     display: none;
+  }
+
+  .admin-hidden-only {
+    padding: 6px 0;
+    font-size: 14px;
+  }
+
+  .admin-hidden-only .form-check-input {
+    width: 20px;
+    height: 20px;
   }
 
   .admin-list-search,

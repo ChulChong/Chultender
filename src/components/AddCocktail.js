@@ -38,6 +38,7 @@ const AddCocktail = () => {
   const [cocktails, setCocktails] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
   const [listSearch, setListSearch] = useState("");
+  const [hiddenOnly, setHiddenOnly] = useState(false);
   // Collapsed by default — only visually meaningful on narrow viewports
   // (see .admin-list-toggle / .admin-list-body in AddCocktail.css); the
   // desktop layout ignores this and always shows the full sidebar.
@@ -84,9 +85,12 @@ const AddCocktail = () => {
 
   const filteredCocktails = useMemo(() => {
     const q = listSearch.trim().toLowerCase();
-    if (!q) return cocktails;
-    return cocktails.filter((c) => c.name.toLowerCase().includes(q));
-  }, [cocktails, listSearch]);
+    return cocktails.filter((c) => {
+      if (hiddenOnly && c.is_show) return false;
+      if (q && !c.name.toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [cocktails, listSearch, hiddenOnly]);
 
   const filteredKeywords = useMemo(() => {
     const q = keywordSearch.trim().toLowerCase();
@@ -316,6 +320,14 @@ const AddCocktail = () => {
               value={listSearch}
               onChange={(e) => setListSearch(e.target.value)}
               className="admin-list-search"
+            />
+            <Form.Check
+              type="checkbox"
+              id="admin-hidden-only"
+              label="Hidden only"
+              checked={hiddenOnly}
+              onChange={(e) => setHiddenOnly(e.target.checked)}
+              className="admin-hidden-only"
             />
             <Button
               variant={editingId === null ? "primary" : "outline-secondary"}
