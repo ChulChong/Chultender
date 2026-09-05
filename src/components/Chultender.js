@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./Chultender.css";
-import { supabase, isSupabaseConfigured } from "../lib/supabaseClient";
+import { backend } from "../lib/backendClient";
 import emailjs from "@emailjs/browser";
 
 // Base spirit shown next to each drink's name, derived from its
@@ -47,26 +47,18 @@ function Chultender() {
   const [sentLabel, setSentLabel] = useState("");
   const sentTimer = useRef(null);
 
-  // Cocktails live in Supabase (see src/lib/supabaseClient.js) instead of
-  // the static src/components/Recipes.js array.
+  // Cocktails come from the Spring Boot backend (spring-backend/, deployed
+  // at api.chultender.com), which itself reads the same Supabase Postgres
+  // table this app used to call directly.
   useEffect(() => {
-    if (!isSupabaseConfigured) {
+    backend.cocktails.list().then(({ data, error }) => {
+      if (error) {
+        console.error("Failed to load cocktails:", error.message);
+      } else {
+        setRecipes(data);
+      }
       setLoading(false);
-      return;
-    }
-    supabase
-      .from("cocktails")
-      .select("*")
-      .eq("is_show", true)
-      .order("name")
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("Failed to load cocktails:", error.message);
-        } else {
-          setRecipes(data);
-        }
-        setLoading(false);
-      });
+    });
   }, []);
 
   useEffect(() => () => clearTimeout(sentTimer.current), []);
@@ -167,13 +159,7 @@ function Chultender() {
           </div>
         </div>
 
-        {!isSupabaseConfigured ? (
-          <div className="chultender-empty">
-            Supabase isn't configured yet — copy .env.local.example to
-            .env.local, fill in your project's URL/anon key, and restart the
-            dev server.
-          </div>
-        ) : loading ? (
+        {loading ? (
           <div className="chultender-empty">Loading cocktails…</div>
         ) : filteredDrinks.length === 0 ? (
           <div className="chultender-empty">

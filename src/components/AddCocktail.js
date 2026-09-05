@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { supabase, isSupabaseConfigured } from "../lib/supabaseClient";
+import { backend } from "../lib/backendClient";
 import { extractColor, loadImageFromFile } from "../lib/extractColor";
 import "./AddCocktail.css";
 
@@ -54,36 +55,26 @@ const AddCocktail = () => {
   const [success, setSuccess] = useState(null);
 
   const fetchCocktails = async () => {
-    if (!isSupabaseConfigured) {
-      setLoadingList(false);
-      return;
-    }
-    const { data, error: fetchError } = await supabase
-      .from("cocktails")
-      .select("*")
-      .order("name");
+    // all=true: the admin list should show hidden cocktails too, not just
+    // the ones the public /Chultender menu shows.
+    const { data, error: fetchError } = await backend.cocktails.list(true);
     if (fetchError) {
       console.error("Failed to load cocktails:", fetchError.message);
     } else {
-      setCocktails(data);
+      setCocktails([...data].sort((a, b) => a.name.localeCompare(b.name)));
     }
     setLoadingList(false);
   };
 
   useEffect(() => {
     fetchCocktails();
-    if (!isSupabaseConfigured) return;
-    supabase
-      .from("ingredient_keywords")
-      .select("*")
-      .order("name")
-      .then(({ data, error: fetchError }) => {
-        if (fetchError) {
-          console.error("Failed to load ingredient keywords:", fetchError.message);
-        } else {
-          setKeywords(data);
-        }
-      });
+    backend.ingredientKeywords.list().then(({ data, error: fetchError }) => {
+      if (fetchError) {
+        console.error("Failed to load ingredient keywords:", fetchError.message);
+      } else {
+        setKeywords(data);
+      }
+    });
   }, []);
 
   const filteredCocktails = useMemo(() => {
@@ -142,7 +133,6 @@ const AddCocktail = () => {
   };
 
   const handleAddKeyword = async () => {
-    if (!isSupabaseConfigured) return;
     const trimmed = newKeywordName.trim();
     if (!trimmed) return;
     const id = slugify(trimmed);
@@ -150,15 +140,15 @@ const AddCocktail = () => {
 
     setAddingKeyword(true);
     try {
-      const { error: insertError } = await supabase
-        .from("ingredient_keywords")
-        .insert({ id, name: trimmed });
-      if (insertError && insertError.code !== "23505") throw insertError; // ignore "already exists"
+      // The backend treats a duplicate id as success (returns the existing
+      // row) rather than an error, matching this form's original behavior.
+      const { data, error: insertError } = await backend.ingredientKeywords.create(trimmed);
+      if (insertError) throw new Error(insertError.message);
 
       setKeywords((prev) =>
-        prev.some((k) => k.id === id)
+        prev.some((k) => k.id === data.id)
           ? prev
-          : [...prev, { id, name: trimmed }].sort((a, b) => a.name.localeCompare(b.name))
+          : [...prev, data].sort((a, b) => a.name.localeCompare(b.name))
       );
       setNewKeywordName("");
     } catch (e) {
@@ -188,13 +178,6 @@ const AddCocktail = () => {
     setError(null);
     setSuccess(null);
 
-    if (!isSupabaseConfigured) {
-      setError(
-        "Supabase isn't configured yet — copy .env.local.example to .env.local, fill in your project's URL/anon key, and restart the dev server."
-      );
-      return;
-    }
-
     const trimmedName = form.name.trim();
     const cleanIngredients = form.ingredientLines.map((l) => l.trim()).filter(Boolean);
 
@@ -213,8 +196,18 @@ const AddCocktail = () => {
       return;
     }
 
+    if (imageFile && !isSupabaseConfigured) {
+      setError(
+        "Supabase isn't configured yet — copy .env.local.example to .env.local, fill in your project's URL/anon key, and restart the dev server (needed for photo uploads)."
+      );
+      return;
+    }
+
     setSubmitting(true);
     try {
+      // Photo storage still goes straight to Supabase Storage — the
+      // Spring Boot backend only handles cocktail/keyword metadata, not
+      // file uploads.
       let imageUrl = existingImageUrl;
       if (imageFile) {
         const extension = imageFile.name.split(".").pop() || "png";
@@ -238,25 +231,20 @@ const AddCocktail = () => {
       };
 
       if (editingId) {
-        const { error: updateError } = await supabase
-          .from("cocktails")
-          .update(payload)
-          .eq("id", editingId);
-        if (updateError) throw updateError;
+        // Cocktail.id is @NotBlank-validated on the way in, so the PUT
+        // body needs it even though the path variable is authoritative.
+        const { error: updateError } = await backend.cocktails.update(editingId, {
+          id: editingId,
+          ...payload,
+        });
+        if (updateError) throw new Error(updateError.message);
         setSuccess(`"${trimmedName}" updated.`);
         setImageFile(null);
         setPreviewUrl(null);
         setExistingImageUrl(imageUrl);
       } else {
-        const { error: insertError } = await supabase
-          .from("cocktails")
-          .insert({ id, ...payload });
-        if (insertError) {
-          if (insertError.code === "23505") {
-            throw new Error(`A cocktail named "${trimmedName}" already exists.`);
-          }
-          throw insertError;
-        }
+        const { error: insertError } = await backend.cocktails.create({ id, ...payload });
+        if (insertError) throw new Error(insertError.message);
         resetForm();
         setSuccess(`"${trimmedName}" added.`);
       }

@@ -1,5 +1,6 @@
 package com.chultender.backend;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -96,38 +97,51 @@ public class Cocktail {
         this.cup = cup;
     }
 
+    // @JsonProperty overrides here match the snake_case field names the
+    // React app already speaks (it read/wrote these via Supabase's
+    // PostgREST, which returns raw column names) — keeps the frontend's
+    // existing field references working unchanged against this API too.
+    @JsonProperty("image_url")
     public String getImageUrl() {
         return imageUrl;
     }
 
+    @JsonProperty("image_url")
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
+    @JsonProperty("background_color")
     public String getBackgroundColor() {
         return backgroundColor;
     }
 
+    @JsonProperty("background_color")
     public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
+    @JsonProperty("font_color")
     public String getFontColor() {
         return fontColor;
     }
 
+    @JsonProperty("font_color")
     public void setFontColor(String fontColor) {
         this.fontColor = fontColor;
     }
 
+    @JsonProperty("is_show")
     public Boolean getIsShow() {
         return isShow;
     }
 
+    @JsonProperty("is_show")
     public void setIsShow(Boolean isShow) {
         this.isShow = isShow;
     }
 
+    @JsonProperty("created_at")
     public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
