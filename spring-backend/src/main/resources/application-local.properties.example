@@ -1,0 +1,3 @@
+# Copy this to application-local.properties (gitignored) and fill in the
+# real value from Supabase: Project Settings > Database > Connection string.
+spring.datasource.password=

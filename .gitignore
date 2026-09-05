@@ -24,6 +24,10 @@
 /scripts/new-images
 /scripts/normalized-images
 
+# spring-backend: build output and the file holding the real DB password
+/spring-backend/target
+/spring-backend/src/main/resources/application-local.properties
+
 # misc
 .DS_Store
 .env.local
