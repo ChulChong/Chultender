@@ -33,12 +33,10 @@ function Recommend() {
     setPicked(null);
   };
 
-  const [activeBases, setActiveBases] = useState([]); // empty = All
+  const [activeBase, setActiveBase] = useState(null); // null = All
 
-  const toggleBase = (base) => {
-    setActiveBases((prev) =>
-      prev.includes(base) ? prev.filter((b) => b !== base) : [...prev, base]
-    );
+  const selectBase = (base) => {
+    setActiveBase((prev) => (prev === base ? null : base));
     setPicked(null);
   };
 
@@ -68,12 +66,10 @@ function Recommend() {
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [drinks]);
 
-  // Tags are AND'd (a drink must carry every selected one), but a drink
-  // only has ONE base spirit — so selecting several bases is OR'd
-  // instead ("Gin or Rum"), same as picking several base radios would.
+  // Tags are AND'd (a drink must carry every selected one). Base spirit
+  // is single-select — a drink only has one, so there's nothing to OR.
   const pool = drinks.filter((d) => {
-    const baseMatch =
-      activeBases.length === 0 || activeBases.includes(d.base_spirit || "Mixed");
+    const baseMatch = !activeBase || (d.base_spirit || "Mixed") === activeBase;
     const tagMatch = activeTags.every((tag) => (d.tags || []).includes(tag));
     return baseMatch && tagMatch;
   });
@@ -155,9 +151,9 @@ function Recommend() {
           <div className="recommend-tags recommend-bases">
             <button
               type="button"
-              className={`recommend-tag${activeBases.length === 0 ? " active" : ""}`}
+              className={`recommend-tag${activeBase === null ? " active" : ""}`}
               onClick={() => {
-                setActiveBases([]);
+                setActiveBase(null);
                 setPicked(null);
               }}
             >
@@ -167,8 +163,8 @@ function Recommend() {
               <button
                 key={base}
                 type="button"
-                className={`recommend-tag${activeBases.includes(base) ? " active" : ""}`}
-                onClick={() => toggleBase(base)}
+                className={`recommend-tag${activeBase === base ? " active" : ""}`}
+                onClick={() => selectBase(base)}
               >
                 {base}
               </button>
@@ -190,7 +186,7 @@ function Recommend() {
             <div className="recommend-pool-count">
               choosing from {pool.length} drink{pool.length === 1 ? "" : "s"}
               {activeTags.length > 0 ? ` tagged "${activeTags.join(", ")}"` : ""}
-              {activeBases.length > 0 ? ` with base ${activeBases.join(" or ")}` : ""}
+              {activeBase ? ` with base ${activeBase}` : ""}
             </div>
           </div>
         )}
