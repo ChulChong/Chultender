@@ -1,14 +1,19 @@
-# chultender-backend (Spring Boot, exploratory)
+# chultender-backend
 
-An alternative REST API for the `cocktails` and `ingredient_keywords`
-tables, built to answer "could this run on Spring Boot instead of calling
-Supabase directly from the browser?" It connects straight to the **same
-Supabase Postgres database** the React app already uses (see
-`../src/lib/supabaseClient.js`) — same data, same rows, no migration
-needed. It is **not wired into the React app** — `Chultender.js` still
-talks to Supabase directly. This is a parallel API to poke at.
+The API `Chultender.js` and `AddCocktail.js` use for cocktails and
+ingredient keywords (`../src/lib/backendClient.js`), in place of calling
+Supabase's PostgREST directly. It connects straight to the **same
+Supabase Postgres database** the app always used — same data, same rows,
+no migration happened, this is just a different door into the same
+table. Started as an exploratory "could this run on Spring Boot instead"
+detour; now it's live in production.
 
-Deployed 24/7 on a free-tier Oracle Cloud VM — see "Deployment" below.
+Photo uploads are the one thing still going straight to Supabase Storage
+from the browser (`AddCocktail.js`) — this API has no file-upload
+endpoint.
+
+Deployed 24/7 on a free-tier Oracle Cloud VM, reachable at
+`https://api.chultender.com` — see "Deployment" below.
 
 ## Setup
 
@@ -125,11 +130,37 @@ ssh opc@<VM IP> "sudo systemctl restart chultender-backend"
 
 Logs: `ssh opc@<VM IP> "sudo journalctl -u chultender-backend -f"`
 
-## If this were to replace Supabase calls in the app
+### HTTPS via Caddy
 
-Not done here, but the path would be: point `Chultender.js` /
-`AddCocktail.js` at `http://<VM IP>:8080/api/cocktails` instead of
-`supabase.from("cocktails")` (ideally behind a domain + HTTPS, not a bare
-IP). Supabase would stay as the Postgres host either way, or could be
-swapped for any other Postgres instance since nothing here is
-Supabase-specific beyond the connection string.
+`chultender.com` is served over HTTPS, so the frontend can't call a plain
+`http://<VM IP>:8080` API (browsers block that as mixed content). Caddy
+sits in front of the jar as a reverse proxy and gets a free Let's Encrypt
+certificate automatically — no config beyond DNS + a `Caddyfile`:
+
+1. Route 53: `A` record `api.chultender.com` → the VM's public IP.
+2. Open ports 80 (ACME HTTP-01 challenge) and 443 (HTTPS) the same way
+   port 8080 was opened above — firewalld on the VM, plus an OCI Security
+   List / NSG ingress rule for both.
+3. Install Caddy (Oracle Linux 9: `sudo dnf copr enable -y @caddy/caddy && sudo dnf install -y caddy`).
+4. `/etc/caddy/Caddyfile`:
+   ```
+   api.chultender.com {
+       reverse_proxy localhost:8080
+   }
+   ```
+5. `sudo systemctl enable --now caddy` — it requests and auto-renews the
+   certificate on its own from then on.
+
+Port 8080 is still open directly too (harmless for this no-auth API, and
+handy for debugging), but the app only ever calls the `https://` address.
+
+## Wired into the frontend
+
+`src/lib/backendClient.js` (in the main project) points
+`Chultender.js` and `AddCocktail.js` at `https://api.chultender.com/api`
+for cocktail and ingredient-keyword reads/writes — Supabase's PostgREST
+is no longer in that path. Photo uploads are the exception: they still
+go straight to Supabase Storage from the browser, since this API has no
+file-upload endpoint. Supabase remains the Postgres host underneath
+either way; swapping it for another Postgres instance would only mean
+changing the connection string here, nothing in the frontend.
