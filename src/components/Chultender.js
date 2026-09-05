@@ -22,6 +22,7 @@ const BASES = [
   "Amaretto",
   "Kahlua",
   "Prosecco",
+  "Tequila",
 ];
 
 function deriveBase(ingredients) {
