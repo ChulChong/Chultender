@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -8,6 +8,16 @@ import "./AddCocktail.css";
 
 const CUP_OPTIONS = ["ontherock", "highball", "flute", "coupe", "martini", "julep"];
 
+const BLANK_FORM = {
+  name: "",
+  details: "",
+  cup: CUP_OPTIONS[0],
+  isShow: true,
+  ingredientLines: [],
+  backgroundColor: "#819651",
+  fontColor: "#ffffff",
+};
+
 function slugify(name) {
   return name
     .toLowerCase()
@@ -16,33 +26,52 @@ function slugify(name) {
     .replace(/^-+|-+$/g, "");
 }
 
+// Cocktail Admin — add new cocktails or edit any existing one. Existing
+// ingredient strings (e.g. "2 oz Bourbon") are edited as plain text lines
+// rather than forced back through the keyword-chip picker, since they
+// weren't necessarily built from a keyword in the first place; the chip
+// row is still there as a quick way to insert a known ingredient name.
 const AddCocktail = () => {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
-  const [details, setDetails] = useState("");
-  const [cup, setCup] = useState(CUP_OPTIONS[0]);
-  const [isShow, setIsShow] = useState(true);
+  const [cocktails, setCocktails] = useState([]);
+  const [loadingList, setLoadingList] = useState(true);
+  const [listSearch, setListSearch] = useState("");
+  const [editingId, setEditingId] = useState(null); // null = adding a new cocktail
 
-  // Ingredients are toggled keyword chips (backed by the
-  // `ingredient_keywords` table) with a free-text amount per selection —
-  // { [keywordId]: amountString }. Composed into the same
-  // "amount name" strings the rest of the app already expects on submit.
+  const [form, setForm] = useState(BLANK_FORM);
+  const [existingImageUrl, setExistingImageUrl] = useState(null);
+
   const [keywords, setKeywords] = useState([]);
-  const [selected, setSelected] = useState({});
   const [newKeywordName, setNewKeywordName] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
 
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [backgroundColor, setBackgroundColor] = useState("#819651");
-  const [fontColor, setFontColor] = useState("#ffffff");
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(null);
+
+  const fetchCocktails = async () => {
+    if (!isSupabaseConfigured) {
+      setLoadingList(false);
+      return;
+    }
+    const { data, error: fetchError } = await supabase
+      .from("cocktails")
+      .select("*")
+      .order("name");
+    if (fetchError) {
+      console.error("Failed to load cocktails:", fetchError.message);
+    } else {
+      setCocktails(data);
+    }
+    setLoadingList(false);
+  };
 
   useEffect(() => {
+    fetchCocktails();
     if (!isSupabaseConfigured) return;
     supabase
       .from("ingredient_keywords")
@@ -57,20 +86,59 @@ const AddCocktail = () => {
       });
   }, []);
 
-  const toggleKeyword = (keyword) => {
-    setSelected((prev) => {
-      const next = { ...prev };
-      if (keyword.id in next) {
-        delete next[keyword.id];
-      } else {
-        next[keyword.id] = "";
-      }
-      return next;
+  const filteredCocktails = useMemo(() => {
+    const q = listSearch.trim().toLowerCase();
+    if (!q) return cocktails;
+    return cocktails.filter((c) => c.name.toLowerCase().includes(q));
+  }, [cocktails, listSearch]);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setForm(BLANK_FORM);
+    setExistingImageUrl(null);
+    setImageFile(null);
+    setPreviewUrl(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const selectCocktail = (cocktail) => {
+    setEditingId(cocktail.id);
+    setForm({
+      name: cocktail.name,
+      details: cocktail.details || "",
+      cup: cocktail.cup || CUP_OPTIONS[0],
+      isShow: !!cocktail.is_show,
+      ingredientLines: [...(cocktail.ingredients || [])],
+      backgroundColor: cocktail.background_color || "#819651",
+      fontColor: cocktail.font_color || "#ffffff",
+    });
+    setExistingImageUrl(cocktail.image_url || null);
+    setImageFile(null);
+    setPreviewUrl(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+
+  const updateLine = (index, value) => {
+    setForm((prev) => {
+      const lines = [...prev.ingredientLines];
+      lines[index] = value;
+      return { ...prev, ingredientLines: lines };
     });
   };
 
-  const setKeywordAmount = (id, amount) => {
-    setSelected((prev) => ({ ...prev, [id]: amount }));
+  const removeLine = (index) => {
+    setForm((prev) => ({
+      ...prev,
+      ingredientLines: prev.ingredientLines.filter((_, i) => i !== index),
+    }));
+  };
+
+  const addLine = (text = "") => {
+    setForm((prev) => ({ ...prev, ingredientLines: [...prev.ingredientLines, text] }));
   };
 
   const handleAddKeyword = async () => {
@@ -92,7 +160,6 @@ const AddCocktail = () => {
           ? prev
           : [...prev, { id, name: trimmed }].sort((a, b) => a.name.localeCompare(b.name))
       );
-      setSelected((prev) => ({ ...prev, [id]: prev[id] ?? "" }));
       setNewKeywordName("");
     } catch (e) {
       setError(e.message || "Couldn't add that keyword.");
@@ -109,8 +176,8 @@ const AddCocktail = () => {
       const image = await loadImageFromFile(file);
       setPreviewUrl(image.src);
       const colors = extractColor(image);
-      setBackgroundColor(colors.backgroundColor);
-      setFontColor(colors.fontColor);
+      updateField("backgroundColor", colors.backgroundColor);
+      updateField("fontColor", colors.fontColor);
     } catch (e) {
       console.error("Couldn't read that image:", e);
     }
@@ -119,7 +186,7 @@ const AddCocktail = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
-    setSuccess(false);
+    setSuccess(null);
 
     if (!isSupabaseConfigured) {
       setError(
@@ -128,26 +195,19 @@ const AddCocktail = () => {
       return;
     }
 
-    const trimmedName = name.trim();
-    const cleanIngredients = Object.entries(selected)
-      .map(([id, amount]) => {
-        const keyword = keywords.find((k) => k.id === id);
-        if (!keyword) return null;
-        const trimmedAmount = amount.trim();
-        return trimmedAmount ? `${trimmedAmount} ${keyword.name}` : keyword.name;
-      })
-      .filter(Boolean);
+    const trimmedName = form.name.trim();
+    const cleanIngredients = form.ingredientLines.map((l) => l.trim()).filter(Boolean);
 
     if (!trimmedName) {
       setError("Give the cocktail a name.");
       return;
     }
     if (cleanIngredients.length === 0) {
-      setError("Pick at least one ingredient.");
+      setError("Add at least one ingredient line.");
       return;
     }
 
-    const id = slugify(trimmedName);
+    const id = editingId || slugify(trimmedName);
     if (!id) {
       setError("That name doesn't produce a usable id — try adding a letter or number.");
       return;
@@ -155,7 +215,7 @@ const AddCocktail = () => {
 
     setSubmitting(true);
     try {
-      let imageUrl = null;
+      let imageUrl = existingImageUrl;
       if (imageFile) {
         const extension = imageFile.name.split(".").pop() || "png";
         const path = `${id}-${Date.now()}.${extension}`;
@@ -166,33 +226,42 @@ const AddCocktail = () => {
         imageUrl = supabase.storage.from("cocktail-photos").getPublicUrl(path).data.publicUrl;
       }
 
-      const { error: insertError } = await supabase.from("cocktails").insert({
-        id,
+      const payload = {
         name: trimmedName,
         ingredients: cleanIngredients,
-        details: details.trim(),
-        cup,
+        details: form.details.trim(),
+        cup: form.cup,
         image_url: imageUrl,
-        background_color: backgroundColor,
-        font_color: fontColor,
-        is_show: isShow,
-      });
-      if (insertError) {
-        if (insertError.code === "23505") {
-          throw new Error(`A cocktail named "${trimmedName}" already exists.`);
+        background_color: form.backgroundColor,
+        font_color: form.fontColor,
+        is_show: form.isShow,
+      };
+
+      if (editingId) {
+        const { error: updateError } = await supabase
+          .from("cocktails")
+          .update(payload)
+          .eq("id", editingId);
+        if (updateError) throw updateError;
+        setSuccess(`"${trimmedName}" updated.`);
+        setImageFile(null);
+        setPreviewUrl(null);
+        setExistingImageUrl(imageUrl);
+      } else {
+        const { error: insertError } = await supabase
+          .from("cocktails")
+          .insert({ id, ...payload });
+        if (insertError) {
+          if (insertError.code === "23505") {
+            throw new Error(`A cocktail named "${trimmedName}" already exists.`);
+          }
+          throw insertError;
         }
-        throw insertError;
+        resetForm();
+        setSuccess(`"${trimmedName}" added.`);
       }
 
-      setSuccess(true);
-      setName("");
-      setSelected({});
-      setDetails("");
-      setCup(CUP_OPTIONS[0]);
-      setImageFile(null);
-      setPreviewUrl(null);
-      setBackgroundColor("#819651");
-      setFontColor("#ffffff");
+      fetchCocktails();
     } catch (e) {
       setError(e.message || "Something went wrong.");
     } finally {
@@ -200,141 +269,214 @@ const AddCocktail = () => {
     }
   };
 
+  const photoSrc = previewUrl || existingImageUrl;
+
   return (
     <div className="add-cocktail">
-      <h1>Add a cocktail</h1>
+      <h1>Cocktail Admin</h1>
       <Button variant="link" onClick={() => navigate("/Chultender")} className="add-cocktail-back">
         ← Back to menu
       </Button>
 
-      <Form onSubmit={handleSubmit} className="add-cocktail-form">
-        <Form.Group className="mb-3">
-          <Form.Label>Name</Form.Label>
-          <Form.Control value={name} onChange={(e) => setName(e.target.value)} required />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Ingredients</Form.Label>
-          <div className="ingredient-chips">
-            {keywords.map((keyword) => {
-              const isSelected = keyword.id in selected;
-              return (
-                <div key={keyword.id} className="ingredient-chip">
+      <div className="admin-layout">
+        <div className="admin-list">
+          <Form.Control
+            size="sm"
+            placeholder="Search cocktails…"
+            value={listSearch}
+            onChange={(e) => setListSearch(e.target.value)}
+            className="admin-list-search"
+          />
+          <Button
+            variant={editingId === null ? "primary" : "outline-secondary"}
+            size="sm"
+            className="admin-new-btn"
+            onClick={resetForm}
+          >
+            + New cocktail
+          </Button>
+          {loadingList ? (
+            <p className="admin-list-status">Loading…</p>
+          ) : (
+            <ul className="admin-list-items">
+              {filteredCocktails.map((c) => (
+                <li key={c.id}>
                   <button
                     type="button"
-                    className={`ingredient-chip-toggle${isSelected ? " selected" : ""}`}
-                    onClick={() => toggleKeyword(keyword)}
+                    className={`admin-list-item${editingId === c.id ? " active" : ""}`}
+                    onClick={() => selectCocktail(c)}
                   >
-                    {keyword.name}
+                    {c.name}
+                    {!c.is_show && <span className="admin-list-hidden"> (hidden)</span>}
                   </button>
-                  {isSelected && (
-                    <input
-                      className="ingredient-chip-amount"
-                      placeholder="amount (e.g. 2 oz)"
-                      value={selected[keyword.id]}
-                      onChange={(e) => setKeywordAmount(keyword.id, e.target.value)}
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                </li>
+              ))}
+              {filteredCocktails.length === 0 && (
+                <li className="admin-list-status">No matches.</li>
+              )}
+            </ul>
+          )}
+        </div>
 
-          <div className="ingredient-add-new">
+        <Form onSubmit={handleSubmit} className="add-cocktail-form">
+          {editingId && (
+            <p className="admin-editing-label">
+              Editing <strong>{editingId}</strong>
+            </p>
+          )}
+
+          <Form.Group className="mb-3">
+            <Form.Label>Name</Form.Label>
             <Form.Control
-              size="sm"
-              placeholder="Not in the list? Type a new ingredient…"
-              value={newKeywordName}
-              onChange={(e) => setNewKeywordName(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddKeyword();
-                }
-              }}
+              value={form.name}
+              onChange={(e) => updateField("name", e.target.value)}
+              required
             />
-            <Button
-              variant="outline-secondary"
-              size="sm"
-              onClick={handleAddKeyword}
-              disabled={addingKeyword || !newKeywordName.trim()}
-            >
-              + Add keyword
-            </Button>
-          </div>
-        </Form.Group>
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Details</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Glass</Form.Label>
-          <Form.Select value={cup} onChange={(e) => setCup(e.target.value)}>
-            {CUP_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Photo</Form.Label>
-          <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
-          {previewUrl && (
-            <div className="add-cocktail-preview">
-              <img src={previewUrl} alt="Preview" />
-              <div className="add-cocktail-swatches">
-                <label>
-                  Background
-                  <input
-                    type="color"
-                    value={backgroundColor}
-                    onChange={(e) => setBackgroundColor(e.target.value)}
+          <Form.Group className="mb-3">
+            <Form.Label>Ingredients</Form.Label>
+            <div className="ingredient-lines">
+              {form.ingredientLines.map((line, i) => (
+                <div className="ingredient-line" key={i}>
+                  <Form.Control
+                    size="sm"
+                    value={line}
+                    placeholder="e.g. 2 oz Bourbon"
+                    onChange={(e) => updateLine(i, e.target.value)}
                   />
-                </label>
-                <label>
-                  Text
-                  <input
-                    type="color"
-                    value={fontColor}
-                    onChange={(e) => setFontColor(e.target.value)}
-                  />
-                </label>
-                <div
-                  className="add-cocktail-swatch-preview"
-                  style={{ backgroundColor, color: fontColor }}
+                  <button
+                    type="button"
+                    className="ingredient-line-remove"
+                    onClick={() => removeLine(i)}
+                    aria-label="Remove ingredient"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <Button variant="outline-secondary" size="sm" onClick={() => addLine("")}>
+                + Add ingredient line
+              </Button>
+            </div>
+
+            <div className="ingredient-chips">
+              {keywords.map((keyword) => (
+                <button
+                  key={keyword.id}
+                  type="button"
+                  className="ingredient-chip-toggle"
+                  onClick={() => addLine(keyword.name)}
+                  title="Insert as a new ingredient line"
                 >
-                  {name || "Preview"}
+                  + {keyword.name}
+                </button>
+              ))}
+            </div>
+
+            <div className="ingredient-add-new">
+              <Form.Control
+                size="sm"
+                placeholder="Not in the list? Type a new ingredient…"
+                value={newKeywordName}
+                onChange={(e) => setNewKeywordName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddKeyword();
+                  }
+                }}
+              />
+              <Button
+                variant="outline-secondary"
+                size="sm"
+                onClick={handleAddKeyword}
+                disabled={addingKeyword || !newKeywordName.trim()}
+              >
+                + Add keyword
+              </Button>
+            </div>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Details</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={form.details}
+              onChange={(e) => updateField("details", e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Glass</Form.Label>
+            <Form.Select value={form.cup} onChange={(e) => updateField("cup", e.target.value)}>
+              {CUP_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Photo</Form.Label>
+            <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+            {photoSrc && (
+              <div className="add-cocktail-preview">
+                <img src={photoSrc} alt="Preview" />
+                <div className="add-cocktail-swatches">
+                  <label>
+                    Background
+                    <input
+                      type="color"
+                      value={form.backgroundColor}
+                      onChange={(e) => updateField("backgroundColor", e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Text
+                    <input
+                      type="color"
+                      value={form.fontColor}
+                      onChange={(e) => updateField("fontColor", e.target.value)}
+                    />
+                  </label>
+                  <div
+                    className="add-cocktail-swatch-preview"
+                    style={{ backgroundColor: form.backgroundColor, color: form.fontColor }}
+                  >
+                    {form.name || "Preview"}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </Form.Group>
+            )}
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Check
-            type="checkbox"
-            label="Show on the menu"
-            checked={isShow}
-            onChange={(e) => setIsShow(e.target.checked)}
-          />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Check
+              type="checkbox"
+              label="Show on the menu"
+              checked={form.isShow}
+              onChange={(e) => updateField("isShow", e.target.checked)}
+            />
+          </Form.Group>
 
-        {error && <p className="add-cocktail-error">{error}</p>}
-        {success && <p className="add-cocktail-success">Cocktail added!</p>}
+          {error && <p className="add-cocktail-error">{error}</p>}
+          {success && <p className="add-cocktail-success">{success}</p>}
 
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Saving…" : "Add cocktail"}
-        </Button>
-      </Form>
+          <div className="admin-form-actions">
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Saving…" : editingId ? "Save changes" : "Add cocktail"}
+            </Button>
+            {editingId && (
+              <Button variant="outline-secondary" type="button" onClick={resetForm}>
+                Cancel
+              </Button>
+            )}
+          </div>
+        </Form>
+      </div>
     </div>
   );
 };

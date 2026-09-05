@@ -100,7 +100,7 @@ const Admin = () => {
 
   return (
     <div className="admin">
-      <Link to="/AddCocktail">+ Add Cocktail</Link>
+      <Link to="/AddCocktail">Manage Cocktails (add / edit)</Link>
       <Accordion>
         <Accordion.Item eventKey="0">
           <Accordion.Header>Ingredients</Accordion.Header>

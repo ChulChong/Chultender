@@ -1,5 +1,5 @@
 .add-cocktail {
-  max-width: 640px;
+  max-width: 980px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -8,8 +8,118 @@
   padding-left: 0;
 }
 
-.add-cocktail-form {
+.admin-layout {
+  display: flex;
+  gap: 28px;
   margin-top: 20px;
+  align-items: flex-start;
+}
+
+.admin-list {
+  width: 220px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 20px;
+}
+
+.admin-list-search {
+  margin-bottom: 2px;
+}
+
+.admin-new-btn {
+  width: 100%;
+}
+
+.admin-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.admin-list-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.admin-list-item:last-child {
+  border-bottom: none;
+}
+
+.admin-list-item:hover {
+  background: #f5f5f5;
+}
+
+.admin-list-item.active {
+  background: #333;
+  color: #fff;
+}
+
+.admin-list-hidden {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.admin-list-status {
+  padding: 8px 10px;
+  color: #777;
+  font-size: 13px;
+}
+
+.admin-editing-label {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.add-cocktail-form {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ingredient-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.ingredient-line {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ingredient-line-remove {
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  color: #c0392b;
 }
 
 .ingredient-chips {
