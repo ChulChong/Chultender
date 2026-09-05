@@ -38,6 +38,10 @@ const AddCocktail = () => {
   const [cocktails, setCocktails] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
   const [listSearch, setListSearch] = useState("");
+  // Collapsed by default — only visually meaningful on narrow viewports
+  // (see .admin-list-toggle / .admin-list-body in AddCocktail.css); the
+  // desktop layout ignores this and always shows the full sidebar.
+  const [listOpen, setListOpen] = useState(false);
   const [editingId, setEditingId] = useState(null); // null = adding a new cocktail
 
   const [form, setForm] = useState(BLANK_FORM);
@@ -98,6 +102,7 @@ const AddCocktail = () => {
     setPreviewUrl(null);
     setError(null);
     setSuccess(null);
+    setListOpen(false);
   };
 
   const selectCocktail = (cocktail) => {
@@ -116,6 +121,7 @@ const AddCocktail = () => {
     setPreviewUrl(null);
     setError(null);
     setSuccess(null);
+    setListOpen(false);
   };
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -275,42 +281,72 @@ const AddCocktail = () => {
 
       <div className="admin-layout">
         <div className="admin-list">
-          <Form.Control
-            size="sm"
-            placeholder="Search cocktails…"
-            value={listSearch}
-            onChange={(e) => setListSearch(e.target.value)}
-            className="admin-list-search"
-          />
-          <Button
-            variant={editingId === null ? "primary" : "outline-secondary"}
-            size="sm"
-            className="admin-new-btn"
-            onClick={resetForm}
+          <button
+            type="button"
+            className="admin-list-toggle"
+            onClick={() => setListOpen((open) => !open)}
           >
-            + New cocktail
-          </Button>
-          {loadingList ? (
-            <p className="admin-list-status">Loading…</p>
-          ) : (
-            <ul className="admin-list-items">
-              {filteredCocktails.map((c) => (
-                <li key={c.id}>
-                  <button
-                    type="button"
-                    className={`admin-list-item${editingId === c.id ? " active" : ""}`}
-                    onClick={() => selectCocktail(c)}
-                  >
-                    {c.name}
-                    {!c.is_show && <span className="admin-list-hidden"> (hidden)</span>}
-                  </button>
-                </li>
-              ))}
-              {filteredCocktails.length === 0 && (
-                <li className="admin-list-status">No matches.</li>
-              )}
-            </ul>
-          )}
+            <span className="admin-list-toggle-label">
+              <span className="admin-list-toggle-title">Cocktails</span>
+              <span className="admin-list-toggle-count">
+                {filteredCocktails.length} of {cocktails.length}
+              </span>
+            </span>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              className={`admin-list-toggle-chevron${listOpen ? " open" : ""}`}
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke="#495057"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div className={`admin-list-body${listOpen ? "" : " collapsed"}`}>
+            <Form.Control
+              size="sm"
+              placeholder="Search cocktails…"
+              value={listSearch}
+              onChange={(e) => setListSearch(e.target.value)}
+              className="admin-list-search"
+            />
+            <Button
+              variant={editingId === null ? "primary" : "outline-secondary"}
+              size="sm"
+              className="admin-new-btn"
+              onClick={resetForm}
+            >
+              + New cocktail
+            </Button>
+            {loadingList ? (
+              <p className="admin-list-status">Loading…</p>
+            ) : (
+              <ul className="admin-list-items">
+                {filteredCocktails.map((c) => (
+                  <li key={c.id}>
+                    <button
+                      type="button"
+                      className={`admin-list-item${editingId === c.id ? " active" : ""}`}
+                      onClick={() => selectCocktail(c)}
+                    >
+                      {c.name}
+                      {!c.is_show && <span className="admin-list-hidden"> (hidden)</span>}
+                    </button>
+                  </li>
+                ))}
+                {filteredCocktails.length === 0 && (
+                  <li className="admin-list-status">No matches.</li>
+                )}
+              </ul>
+            )}
+          </div>
         </div>
 
         <Form onSubmit={handleSubmit} className="add-cocktail-form">
