@@ -200,7 +200,10 @@
 .chultender-panel-grid {
   padding: 2px 16px 20px;
   display: grid;
-  grid-template-columns: 1fr 128px;
+  /* Generated illustrations are always a square 1000x1000 canvas (see
+     scripts/normalize_images.py), so the photo column matches the cell's
+     own height — a narrower column would crop the sides. */
+  grid-template-columns: 1fr 170px;
   gap: 16px;
   align-items: start;
 }
@@ -236,6 +239,7 @@
 
 .chultender-photo {
   max-height: 162px;
+  max-width: 100%;
   width: auto;
 }
 
