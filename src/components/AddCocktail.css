@@ -364,6 +364,13 @@
   font-size: 14px;
 }
 
+/* Unsaved change indicator — until "Save inventory" is clicked, ticking
+   a box doesn't touch the API (see AddCocktail.js's toggleOwnedLocal). */
+.bar-inventory-item.dirty label {
+  color: #b06a00;
+  font-weight: 600;
+}
+
 .add-cocktail-error {
   color: #c0392b;
 }

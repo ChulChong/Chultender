@@ -110,7 +110,6 @@ const AddCocktail = () => {
   // Swaps the right-hand panel for the Bar Inventory checklist instead of
   // the cocktail form — see the "🍸 Bar Inventory" button below.
   const [showInventory, setShowInventory] = useState(false);
-  const [savingOwnedId, setSavingOwnedId] = useState(null);
 
   const [form, setForm] = useState(BLANK_FORM);
   // Which ingredient line's "Base" radio is checked — purely for
@@ -131,6 +130,12 @@ const AddCocktail = () => {
   const [keywordSearch, setKeywordSearch] = useState("");
   const [newKeywordName, setNewKeywordName] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
+  // Bar Inventory panel — checkbox toggles only update this local state;
+  // nothing hits the API until "Save inventory" is clicked (one request
+  // per changed ingredient, not one per click). savedOwnedIds is the
+  // last-known-saved baseline, used to figure out what's actually dirty.
+  const [savedOwnedIds, setSavedOwnedIds] = useState(new Set());
+  const [savingInventory, setSavingInventory] = useState(false);
 
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -158,6 +163,7 @@ const AddCocktail = () => {
         console.error("Failed to load ingredient keywords:", fetchError.message);
       } else {
         setKeywords(data);
+        setSavedOwnedIds(new Set(data.filter((k) => k.is_owned).map((k) => k.id)));
       }
     });
   }, []);
@@ -241,25 +247,47 @@ const AddCocktail = () => {
     }));
   };
 
-  // Bar Inventory panel — toggles whether the admin currently has this
-  // ingredient in stock. Optimistic update, reverted on failure.
-  const toggleOwned = async (keyword) => {
-    const nextOwned = !keyword.is_owned;
+  // Bar Inventory panel — flips the checkbox locally only. Nothing is
+  // sent to the API until "Save inventory" is clicked, so ticking a run
+  // of boxes doesn't fire a request per click.
+  const toggleOwnedLocal = (keywordId) => {
     setKeywords((prev) =>
-      prev.map((k) => (k.id === keyword.id ? { ...k, is_owned: nextOwned } : k))
+      prev.map((k) => (k.id === keywordId ? { ...k, is_owned: !k.is_owned } : k))
     );
-    setSavingOwnedId(keyword.id);
-    const { error: patchError } = await backend.ingredientKeywords.setOwned(
-      keyword.id,
-      nextOwned
+  };
+
+  const dirtyKeywords = useMemo(
+    () => keywords.filter((k) => !!k.is_owned !== savedOwnedIds.has(k.id)),
+    [keywords, savedOwnedIds]
+  );
+
+  const saveInventory = async () => {
+    if (dirtyKeywords.length === 0) return;
+    setSavingInventory(true);
+    setError(null);
+    setSuccess(null);
+
+    const results = await Promise.all(
+      dirtyKeywords.map((k) => backend.ingredientKeywords.setOwned(k.id, !!k.is_owned))
     );
-    if (patchError) {
-      setKeywords((prev) =>
-        prev.map((k) => (k.id === keyword.id ? { ...k, is_owned: !nextOwned } : k))
-      );
-      setError(patchError.message || "Couldn't update that ingredient.");
+    const failed = dirtyKeywords.filter((_, i) => results[i].error);
+
+    setSavedOwnedIds((prev) => {
+      const next = new Set(prev);
+      dirtyKeywords.forEach((k, i) => {
+        if (results[i].error) return; // leave failed ones dirty, retry-able
+        if (k.is_owned) next.add(k.id);
+        else next.delete(k.id);
+      });
+      return next;
+    });
+
+    if (failed.length > 0) {
+      setError(`Couldn't save: ${failed.map((k) => k.name).join(", ")}`);
+    } else {
+      setSuccess("Bar inventory saved.");
     }
-    setSavingOwnedId(null);
+    setSavingInventory(false);
   };
 
   const updateLine = (index, value) => {
@@ -547,9 +575,11 @@ const AddCocktail = () => {
                   id={`owned-${keyword.id}`}
                   label={keyword.name}
                   checked={!!keyword.is_owned}
-                  disabled={savingOwnedId === keyword.id}
-                  onChange={() => toggleOwned(keyword)}
-                  className="bar-inventory-item"
+                  disabled={savingInventory}
+                  onChange={() => toggleOwnedLocal(keyword.id)}
+                  className={`bar-inventory-item${
+                    dirtyKeywords.some((k) => k.id === keyword.id) ? " dirty" : ""
+                  }`}
                 />
               ))}
               {filteredKeywords.length === 0 && (
@@ -557,7 +587,19 @@ const AddCocktail = () => {
               )}
             </div>
             {error && <p className="add-cocktail-error">{error}</p>}
+            {success && <p className="add-cocktail-success">{success}</p>}
             <div className="admin-form-actions">
+              <Button
+                type="button"
+                onClick={saveInventory}
+                disabled={savingInventory || dirtyKeywords.length === 0}
+              >
+                {savingInventory
+                  ? "Saving…"
+                  : dirtyKeywords.length > 0
+                  ? `Save inventory (${dirtyKeywords.length})`
+                  : "Save inventory"}
+              </Button>
               <Button variant="outline-secondary" type="button" onClick={() => setShowInventory(false)}>
                 ← Back to cocktails
               </Button>
