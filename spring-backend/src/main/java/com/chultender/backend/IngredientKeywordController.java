@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,20 @@ public class IngredientKeywordController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of("error", "Keyword id already exists: " + id));
         }
+    }
+
+    /** Toggles whether the admin currently has this ingredient in stock
+     * (see the Bar Inventory panel in AddCocktail.js). Body: {"is_owned": true|false}. */
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> setOwned(@PathVariable String id, @RequestBody Map<String, Boolean> body) {
+        Boolean isOwned = body.get("is_owned");
+        if (isOwned == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "is_owned is required"));
+        }
+        return repository.findById(id).map(keyword -> {
+            keyword.setIsOwned(isOwned);
+            return ResponseEntity.ok(repository.save(keyword));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

@@ -348,6 +348,22 @@
   text-align: center;
 }
 
+.bar-inventory-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 4px 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.bar-inventory-item {
+  font-size: 14px;
+}
+
 .add-cocktail-error {
   color: #c0392b;
 }

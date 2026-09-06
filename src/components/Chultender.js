@@ -18,6 +18,8 @@ function Chultender() {
   const [sentLabel, setSentLabel] = useState("");
   const sentTimer = useRef(null);
 
+  const [ownedIds, setOwnedIds] = useState(null); // null = still loading
+
   // Cocktails come from the Spring Boot backend (spring-backend/, deployed
   // at api.chultender.com), which itself reads the same Supabase Postgres
   // table this app used to call directly.
@@ -30,15 +32,38 @@ function Chultender() {
       }
       setLoading(false);
     });
+    // Bar Inventory (see AddCocktail.js) — a drink is hidden below unless
+    // every id in its required_keywords is checked off here.
+    backend.ingredientKeywords.list().then(({ data, error }) => {
+      if (error) {
+        // Leave ownedIds null on failure — the filter below treats null
+        // as "unknown, don't hide anything" rather than "own nothing".
+        console.error("Failed to load ingredient keywords:", error.message);
+      } else {
+        setOwnedIds(new Set(data.filter((k) => k.is_owned).map((k) => k.id)));
+      }
+    });
   }, []);
 
   useEffect(() => () => clearTimeout(sentTimer.current), []);
 
   const drinks = useMemo(() => {
+    // Bar Inventory filter — a drink needs every id in its
+    // required_keywords checked off in AddCocktail.js's inventory panel
+    // to show up here. A drink with no required_keywords set (not yet
+    // configured, or made of untracked odds and ends) always shows.
+    // ownedIds === null means the keyword list hasn't loaded yet (or
+    // failed to) — don't hide anything until it's known.
+    const makeable = ownedIds
+      ? recipes.filter((recipe) =>
+          (recipe.required_keywords || []).every((id) => ownedIds.has(id))
+        )
+      : recipes;
+
     // base_spirit is set explicitly per cocktail in Cocktail Admin (the
     // "Base" radio next to an ingredient line) — no more guessing it
     // from ingredient text on every render.
-    const withBase = recipes.map((recipe) => ({
+    const withBase = makeable.map((recipe) => ({
       ...recipe,
       base: recipe.base_spirit || "Mixed",
     }));
@@ -52,7 +77,7 @@ function Chultender() {
       ...drink,
       num: String(index + 1).padStart(2, "0"),
     }));
-  }, [recipes]);
+  }, [recipes, ownedIds]);
 
   const query = search.trim().toLowerCase();
   const filteredDrinks = query

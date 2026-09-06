@@ -58,8 +58,9 @@ Method → **Session pooler**.
 
 | Method | Path                              | Notes                                             |
 | ------ | --------------------------------- | -------------------------------------------------- |
-| GET    | `/api/ingredient-keywords`        | All keywords, ordered by name.                     |
+| GET    | `/api/ingredient-keywords`        | All keywords, ordered by name. Includes `is_owned`. |
 | POST   | `/api/ingredient-keywords`        | Body: `{"name": "..."}` (`id` optional, auto-slugified from `name`). Duplicate id returns the existing row instead of erroring — matches the app's current "ignore 23505" behavior for this table. |
+| PATCH  | `/api/ingredient-keywords/{id}`   | Body: `{"is_owned": true\|false}` — toggles whether the admin currently has this ingredient in stock. Backs the Bar Inventory panel in `AddCocktail.js`. 404 if missing. |
 | DELETE | `/api/ingredient-keywords/{id}`   | Actually deletes — same DELETE-bypasses-RLS story as `cocktails` above; the anon-key client has no DELETE policy on this table either. 404 if missing. |
 
 | Method | Path                | Notes                                             |
@@ -75,6 +76,18 @@ to one ingredient line) — not inferred from ingredient text. `POST
 explicit-field pattern, admin-picked from a fixed list in
 `AddCocktail.js`, defaults to `[]` on create. Powers the tag filters
 on the frontend's `/Recommend` page.
+
+`cocktails.required_keywords` (text[] column, e.g. `["rum",
+"lime-juice"]`) — ingredient-keyword ids this drink needs, admin-picked
+from the same chip list as the ingredient composer, defaults to `[]`
+on create. `Chultender.js` and `Recommend.js` hide a drink unless every
+id here has `ingredient_keywords.is_owned = true` (toggled from the
+"🍸 Bar Inventory" panel in `AddCocktail.js`) — a drink with an empty
+`required_keywords` always shows. Backfilled for the original 48
+cocktails by matching each ingredient-keyword name (with a short alias
+list for known typos/spelling variants — "Curaço", "Sweet & Sour", …)
+against the free-text ingredient lines; new cocktails need it picked
+by hand like `tags`.
 
 CORS is wide open (`@CrossOrigin(origins = "*")`), matching the rest of
 this project's no-auth design.

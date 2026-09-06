@@ -64,6 +64,15 @@ public class Cocktail {
     @Column(columnDefinition = "text[]")
     private String[] tags;
 
+    // Ingredient-keyword ids this drink needs (see ingredient_keywords /
+    // IngredientKeyword.isOwned) — admin-picked from the same chip list
+    // AddCocktail.js already offers, same explicit-field pattern as
+    // base_spirit/tags. Chultender.js hides the drink unless every id
+    // here is currently owned.
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(name = "required_keywords", columnDefinition = "text[]")
+    private String[] requiredKeywords;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
@@ -175,5 +184,15 @@ public class Cocktail {
 
     public void setTags(String[] tags) {
         this.tags = tags;
+    }
+
+    @JsonProperty("required_keywords")
+    public String[] getRequiredKeywords() {
+        return requiredKeywords;
+    }
+
+    @JsonProperty("required_keywords")
+    public void setRequiredKeywords(String[] requiredKeywords) {
+        this.requiredKeywords = requiredKeywords;
     }
 }

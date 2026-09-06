@@ -35,6 +35,7 @@ const BLANK_FORM = {
   fontColor: "#ffffff",
   baseSpirit: "",
   tags: [],
+  requiredKeywords: [],
 };
 
 const UNIT_OPTIONS = ["oz", "ml", "fill"];
@@ -106,6 +107,10 @@ const AddCocktail = () => {
   // desktop layout ignores this and always shows the full sidebar.
   const [listOpen, setListOpen] = useState(false);
   const [editingId, setEditingId] = useState(null); // null = adding a new cocktail
+  // Swaps the right-hand panel for the Bar Inventory checklist instead of
+  // the cocktail form — see the "🍸 Bar Inventory" button below.
+  const [showInventory, setShowInventory] = useState(false);
+  const [savingOwnedId, setSavingOwnedId] = useState(null);
 
   const [form, setForm] = useState(BLANK_FORM);
   // Which ingredient line's "Base" radio is checked — purely for
@@ -185,6 +190,7 @@ const AddCocktail = () => {
     setError(null);
     setSuccess(null);
     setListOpen(false);
+    setShowInventory(false);
   };
 
   const selectCocktail = (cocktail) => {
@@ -199,6 +205,7 @@ const AddCocktail = () => {
       fontColor: cocktail.font_color || "#ffffff",
       baseSpirit: cocktail.base_spirit || "",
       tags: [...(cocktail.tags || [])],
+      requiredKeywords: [...(cocktail.required_keywords || [])],
     });
     setBaseLineIndex(null);
     setComposerName("");
@@ -210,6 +217,7 @@ const AddCocktail = () => {
     setError(null);
     setSuccess(null);
     setListOpen(false);
+    setShowInventory(false);
   };
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -219,6 +227,39 @@ const AddCocktail = () => {
       ...prev,
       tags: prev.tags.includes(tag) ? prev.tags.filter((t) => t !== tag) : [...prev.tags, tag],
     }));
+  };
+
+  // Which ingredient-keyword ids this drink needs to be makeable — see
+  // the "Required ingredients" section below. Chultender.js hides the
+  // drink unless every id here is checked off in the Bar Inventory panel.
+  const toggleRequiredKeyword = (keywordId) => {
+    setForm((prev) => ({
+      ...prev,
+      requiredKeywords: prev.requiredKeywords.includes(keywordId)
+        ? prev.requiredKeywords.filter((k) => k !== keywordId)
+        : [...prev.requiredKeywords, keywordId],
+    }));
+  };
+
+  // Bar Inventory panel — toggles whether the admin currently has this
+  // ingredient in stock. Optimistic update, reverted on failure.
+  const toggleOwned = async (keyword) => {
+    const nextOwned = !keyword.is_owned;
+    setKeywords((prev) =>
+      prev.map((k) => (k.id === keyword.id ? { ...k, is_owned: nextOwned } : k))
+    );
+    setSavingOwnedId(keyword.id);
+    const { error: patchError } = await backend.ingredientKeywords.setOwned(
+      keyword.id,
+      nextOwned
+    );
+    if (patchError) {
+      setKeywords((prev) =>
+        prev.map((k) => (k.id === keyword.id ? { ...k, is_owned: !nextOwned } : k))
+      );
+      setError(patchError.message || "Couldn't update that ingredient.");
+    }
+    setSavingOwnedId(null);
   };
 
   const updateLine = (index, value) => {
@@ -360,6 +401,7 @@ const AddCocktail = () => {
         is_show: form.isShow,
         base_spirit: form.baseSpirit.trim() || "Mixed",
         tags: form.tags,
+        required_keywords: form.requiredKeywords,
       };
 
       if (editingId) {
@@ -445,12 +487,20 @@ const AddCocktail = () => {
               className="admin-hidden-only"
             />
             <Button
-              variant={editingId === null ? "primary" : "outline-secondary"}
+              variant={editingId === null && !showInventory ? "primary" : "outline-secondary"}
               size="sm"
               className="admin-new-btn"
               onClick={resetForm}
             >
               + New cocktail
+            </Button>
+            <Button
+              variant={showInventory ? "primary" : "outline-secondary"}
+              size="sm"
+              className="admin-new-btn"
+              onClick={() => setShowInventory(true)}
+            >
+              🍸 Bar Inventory
             </Button>
             {loadingList ? (
               <p className="admin-list-status">Loading…</p>
@@ -476,6 +526,44 @@ const AddCocktail = () => {
           </div>
         </div>
 
+        {showInventory ? (
+          <div className="add-cocktail-form bar-inventory">
+            <p className="admin-editing-label">
+              Check off what's in your bar. Chultender only shows drinks whose
+              ingredients are all checked here.
+            </p>
+            <Form.Control
+              size="sm"
+              placeholder="Search ingredients…"
+              value={keywordSearch}
+              onChange={(e) => setKeywordSearch(e.target.value)}
+              className="mb-3"
+            />
+            <div className="bar-inventory-list">
+              {filteredKeywords.map((keyword) => (
+                <Form.Check
+                  key={keyword.id}
+                  type="checkbox"
+                  id={`owned-${keyword.id}`}
+                  label={keyword.name}
+                  checked={!!keyword.is_owned}
+                  disabled={savingOwnedId === keyword.id}
+                  onChange={() => toggleOwned(keyword)}
+                  className="bar-inventory-item"
+                />
+              ))}
+              {filteredKeywords.length === 0 && (
+                <span className="ingredient-chips-empty">No matching ingredients.</span>
+              )}
+            </div>
+            {error && <p className="add-cocktail-error">{error}</p>}
+            <div className="admin-form-actions">
+              <Button variant="outline-secondary" type="button" onClick={() => setShowInventory(false)}>
+                ← Back to cocktails
+              </Button>
+            </div>
+          </div>
+        ) : (
         <Form onSubmit={handleSubmit} className="add-cocktail-form">
           {editingId && (
             <p className="admin-editing-label">
@@ -587,6 +675,27 @@ const AddCocktail = () => {
                     onClick={() => toggleTag(tag)}
                   >
                     {tag}
+                  </button>
+                ))}
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>
+                Required ingredients (checked against the Bar Inventory panel —
+                hides this drink from Chultender when any are missing)
+              </Form.Label>
+              <div className="tag-options">
+                {keywords.map((keyword) => (
+                  <button
+                    key={keyword.id}
+                    type="button"
+                    className={`tag-toggle${
+                      form.requiredKeywords.includes(keyword.id) ? " selected" : ""
+                    }`}
+                    onClick={() => toggleRequiredKeyword(keyword.id)}
+                  >
+                    {keyword.name}
                   </button>
                 ))}
               </div>
@@ -718,6 +827,7 @@ const AddCocktail = () => {
             )}
           </div>
         </Form>
+        )}
       </div>
     </div>
   );

@@ -47,6 +47,8 @@ function Recommend() {
   const [sent, setSent] = useState(false);
   const sentTimer = useRef(null);
 
+  const [ownedIds, setOwnedIds] = useState(null); // null = still loading / unknown
+
   useEffect(() => {
     backend.cocktails.list().then(({ data, error }) => {
       if (error) {
@@ -56,19 +58,34 @@ function Recommend() {
       }
       setLoading(false);
     });
+    // Bar Inventory (see AddCocktail.js) — same filter Chultender.js
+    // applies, so this never recommends a drink you can't actually make.
+    backend.ingredientKeywords.list().then(({ data, error }) => {
+      if (error) {
+        console.error("Failed to load ingredient keywords:", error.message);
+      } else {
+        setOwnedIds(new Set(data.filter((k) => k.is_owned).map((k) => k.id)));
+      }
+    });
   }, []);
 
   useEffect(() => () => clearTimeout(sentTimer.current), []);
 
-  // Every base spirit actually present in the loaded drinks, alphabetized.
+  const makeableDrinks = useMemo(() => {
+    if (!ownedIds) return drinks;
+    return drinks.filter((d) => (d.required_keywords || []).every((id) => ownedIds.has(id)));
+  }, [drinks, ownedIds]);
+
+  // Every base spirit actually present in the loaded (makeable) drinks,
+  // alphabetized.
   const baseOptions = useMemo(() => {
-    const set = new Set(drinks.map((d) => d.base_spirit || "Mixed"));
+    const set = new Set(makeableDrinks.map((d) => d.base_spirit || "Mixed"));
     return Array.from(set).sort((a, b) => a.localeCompare(b));
-  }, [drinks]);
+  }, [makeableDrinks]);
 
   // Tags are AND'd (a drink must carry every selected one). Base spirit
   // is single-select — a drink only has one, so there's nothing to OR.
-  const pool = drinks.filter((d) => {
+  const pool = makeableDrinks.filter((d) => {
     const baseMatch = !activeBase || (d.base_spirit || "Mixed") === activeBase;
     const tagMatch = activeTags.every((tag) => (d.tags || []).includes(tag));
     return baseMatch && tagMatch;

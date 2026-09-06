@@ -62,6 +62,13 @@ export const backend = {
         method: "POST",
         body: JSON.stringify({ name }),
       }),
+    // Bar Inventory panel in AddCocktail.js — marks whether the admin
+    // currently has this ingredient on hand.
+    setOwned: (id, isOwned) =>
+      request(`/ingredient-keywords/${encodeURIComponent(id)}`, {
+        method: "PATCH",
+        body: JSON.stringify({ is_owned: isOwned }),
+      }),
   },
   admin: {
     // The actual password lives only in the backend's gitignored
